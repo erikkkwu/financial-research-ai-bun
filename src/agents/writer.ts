@@ -21,7 +21,7 @@ const prompt = buildPromptWithContext(app => [
 
     // Step 2: Gather & Analyze Technicals (Origin: Financial Analyst)
     '**Step 2: Technical Analysis**',
-    '- Use "get_historical_prices" (OHLCV) or equivalent tools.',
+    '- Use "get_aggs" (OHLCV) or equivalent tools to gather historical data for each timeframe. (Do not look at materials older than 3 years.)',
     '- **Short-term (Daily)**: Check Momentum (RSI/MACD logic) and Volume spikes.',
     '- **Mid-term (Weekly)**: Identify Trends (MA20/MA50) and Patterns.',
     '- **Long-term (Monthly)**: Assess Macro Trend vs MA200.',
@@ -38,7 +38,7 @@ const prompt = buildPromptWithContext(app => [
     '  - **Part 1: 市場情緒與消息面分析** (Include Sentiment Score & Catalysts)',
     '  - **Part 2: 短中長期技術分析** (Include OHLCV insights & Trends)',
     '  - **Part 3: 操作建議與策略** (Synthesized verdict with specific Entry/Profit/Stop-Loss levels)',
-    '    - Explicitly state: "短線(1-4週)", "中線(1-3月)", "長線(半年以上)" strategies.',
+    '  - Explicitly state: "短線(1-4週)", "中線(1-3月)", "長線(半年以上)" strategies.',
 
     // 4. Constraints
     'Output MUST be in Traditional Chinese (繁體中文).',
