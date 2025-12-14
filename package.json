@@ -1,20 +1,17 @@
 {
+  "type": "module",
   "scripts": {
-    "start": "bun --env-file=.env ./src/main.ts"
-  },
-  "devDependencies": {
-    "@types/bun": "^1.3.4"
+    "start": "tsx --env-file=.env ./src/main.ts",
+    "serve": "tsx ./src/main.ts",
+    "build": "tsc"
   },
   "dependencies": {
-    "telegraf": "^4.16.3",
-    "parse-duration": "^2.1.4",
-    "zod": "^4.1.13",
-    "@openai/agents": "^0.3.4",
-    "@massive.com/client-js" : "^10.1.0",
-    "lodash-es" :"^4.17.21",
-    "@types/lodash-es" :"^4.17.12",
-    "@langchain/textsplitters" : "^1.0.1",
-    "telegramify-markdown" : "^1.3.0",
-    "telegram-markdown-v2" : "^0.0.4"
+    "telegraf": "4.16.3",
+    "zod": "4.1.13",
+    "@openai/agents": "0.3.4",
+    "@massive.com/client-js" : "10.1.0",
+    "@langchain/textsplitters" : "1.0.1",
+    "telegramify-markdown" : "1.3.0",
+    "typescript": "5.9.3"
   }
 }

@@ -1,7 +1,8 @@
-import { Service } from './service'
-import {TelegramBot} from "./bot";
-import {createAgentGroup} from "./agents/agentGroup.ts";
-
+import { Service } from './service/index.js'
+import {TelegramBot} from "./bot/index.js";
+import {createAgentGroup} from "./agents/agentGroup.js";
+import { setDefaultResultOrder } from "node:dns";
+setDefaultResultOrder("ipv6first");
 const telegramBot = new TelegramBot();
 const agentGroup = createAgentGroup();
 const service = new Service(telegramBot , agentGroup);

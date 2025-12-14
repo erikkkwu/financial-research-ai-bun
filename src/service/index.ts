@@ -1,4 +1,4 @@
-import type {Bot} from "../bot";
+import type {Bot} from "../bot/index.ts";
 import type {IAgentGroup} from "../agents/agentGroup.ts";
 import {RecursiveCharacterTextSplitter} from "@langchain/textsplitters";
 import telegramifyMarkdown from 'telegramify-markdown';
@@ -51,10 +51,20 @@ export class Service {
                     const outputDocs = await recursiveCharacterTextSplitter.createDocuments([report.markdown_report.replace(/^[\s\t]*[-*_]{3,}[\s\t]*$/gm, '')]);
 
                     for (const doc of outputDocs) {
-                        await ctx.reply(telegramifyMarkdown(doc.pageContent, 'escape'), {
-                            parse_mode: "MarkdownV2",
-                            link_preview_options: {is_disabled: true}
-                        });
+                        try {
+                            const markdown = telegramifyMarkdown(doc.pageContent, 'escape');
+                            console.log(markdown)
+                            await ctx.reply(markdown, {
+                                parse_mode: "MarkdownV2",
+                                link_preview_options: {is_disabled: true}
+                            });
+                        }
+                        catch (e) {
+                            await ctx.reply(doc.pageContent, {
+                                parse_mode: "Markdown",
+                                link_preview_options: {is_disabled: true}
+                            });
+                        }
                         await new Promise(resolve => setTimeout(resolve, 500));
                     }
                 } catch (e) {

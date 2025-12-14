@@ -1,9 +1,9 @@
 import {type Agent, MCPServerStdio, run  } from "@openai/agents";
 import type {AppContext} from "./context.ts";
-import {plannerAgent} from "./plannerAgent.ts";
-import {newsAnalystAgent} from "./newsAnalyst.ts";
-import {FinancialReportData, type FinancialReportDataType,  writerAgent } from "./writer.ts";
-import {financialAnalystAgent} from "./financialAnalyst.ts";
+import {plannerAgent} from "./plannerAgent.js";
+import {newsAnalystAgent} from "./newsAnalyst.js";
+import {FinancialReportData, type FinancialReportDataType,  writerAgent } from "./writer.js";
+import {financialAnalystAgent} from "./financialAnalyst.js";
 
 export interface IAgentGroup {
     run(query: string , context: AppContext): Promise<FinancialReportDataType>;

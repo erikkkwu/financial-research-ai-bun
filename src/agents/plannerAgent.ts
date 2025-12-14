@@ -1,6 +1,6 @@
 import {Agent  } from "@openai/agents";
 import {z} from "zod/v4";
-import {AgentType} from "./constants.ts";
+import {AgentType} from "./constants.js";
 
 export const plannerPrompt = [
     'You are a research planning coordinator.',

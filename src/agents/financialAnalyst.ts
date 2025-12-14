@@ -1,5 +1,5 @@
 import {Agent} from "@openai/agents";
-import {type AppContext, buildPromptWithContext} from "./context.ts";
+import {type AppContext, buildPromptWithContext} from "./context.js";
 
 const prompt= buildPromptWithContext((appContext ) =>
         [
