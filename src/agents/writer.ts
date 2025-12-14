@@ -14,18 +14,25 @@ const prompt = buildPromptWithContext(app => [
 
     // Step 1: Gather & Analyze News (Origin: News Analyst)
     '**Step 1: News & Sentiment Analysis**',
-    '- Use "list_ticker_news" (or equivalent tool) to gather recent news.',
-    '- Filter out duplicates and low-value press releases.',
-    '- **Action**: Determine a sentiment score (0-100) and identify key catalysts (e.g., Earnings, Macro, Regulatory).',
-    '- Classify news impacts into Short-term (shock) vs. Long-term (fundamental).',
+    '- Call "list_ticker_news" **EXACTLY ONCE**. Set the limit parameter to 50 (or max available) to get all necessary data in one shot.',
+    '- **DO NOT** paginate or make follow-up calls for older news. Analyze ONLY what you get in the first batch.',
+    '- Filter out duplicates internally.',
+
+    // '- Use "list_ticker_news" (or equivalent tool) to gather recent news.',
+    // '- Filter out duplicates and low-value press releases.',
+    // '- **Action**: Determine a sentiment score (0-100) and identify key catalysts (e.g., Earnings, Macro, Regulatory).',
+    // '- Classify news impacts into Short-term (shock) vs. Long-term (fundamental).',
 
     // Step 2: Gather & Analyze Technicals (Origin: Financial Analyst)
     '**Step 2: Technical Analysis**',
-    '- Use "get_aggs" (OHLCV) or equivalent tools to gather historical data for each timeframe. (Do not look at materials older than 3 years.)',
-    '- **Short-term (Daily)**: Check Momentum (RSI/MACD logic) and Volume spikes.',
-    '- **Mid-term (Weekly)**: Identify Trends (MA20/MA50) and Patterns.',
-    '- **Long-term (Monthly)**: Assess Macro Trend vs MA200.',
-    '- **Action**: Calculate specific Support/Resistance levels and Stop-Loss zones.',
+    '- Call "get_aggs" **EXACTLY ONCE**.',
+    '- Request a wide date range (e.g., past 365 days) in a single request to cover Short/Mid/Long-term needs.',
+    '- **DO NOT** call the tool multiple times for different timeframes (e.g., do not call once for daily and once for weekly). Calculate weekly/monthly trends from the daily data provided.',
+    // '- Use "get_aggs" (OHLCV) or equivalent tools to gather historical data for each timeframe. (Do not look at materials older than 3 years.)',
+    // '- **Short-term (Daily)**: Check Momentum (RSI/MACD logic) and Volume spikes.',
+    // '- **Mid-term (Weekly)**: Identify Trends (MA20/MA50) and Patterns.',
+    // '- **Long-term (Monthly)**: Assess Macro Trend vs MA200.',
+    // '- **Action**: Calculate specific Support/Resistance levels and Stop-Loss zones.',
 
     // Step 3: Synthesis & Writing (Origin: Writer Agent)
     '**Step 3: Synthesis & Reporting**',
