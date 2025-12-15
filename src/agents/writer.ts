@@ -17,22 +17,16 @@ const prompt = buildPromptWithContext(app => [
     '- Call "list_ticker_news" **EXACTLY ONCE**. Set the limit parameter to 50 (or max available) to get all necessary data in one shot.',
     '- **DO NOT** paginate or make follow-up calls for older news. Analyze ONLY what you get in the first batch.',
     '- Filter out duplicates internally.',
-
-    // '- Use "list_ticker_news" (or equivalent tool) to gather recent news.',
-    // '- Filter out duplicates and low-value press releases.',
-    // '- **Action**: Determine a sentiment score (0-100) and identify key catalysts (e.g., Earnings, Macro, Regulatory).',
-    // '- Classify news impacts into Short-term (shock) vs. Long-term (fundamental).',
+    '- **Mandatory Classification**: Based on the news, you MUST determine the following:',
+    '  1. **Overall Mood**: Choose EXACTLY ONE from ["樂觀 (Optimistic)", "保留 (Reserved)", "悲觀 (Pessimistic)"].',
+    '  2. **Short-term View (News/Catalyst driven)**: Choose ["看漲 (Bullish)", "看跌 (Bearish)", "震盪 (Neutral)"].',
+    '  3. **Long-term View (Fundamental driven)**: Choose ["看漲 (Bullish)", "看跌 (Bearish)", "中性 (Neutral)"].',
 
     // Step 2: Gather & Analyze Technicals (Origin: Financial Analyst)
     '**Step 2: Technical Analysis**',
     '- Call "get_aggs" **EXACTLY ONCE**.',
     '- Request a wide date range (e.g., past 365 days) in a single request to cover Short/Mid/Long-term needs.',
     '- **DO NOT** call the tool multiple times for different timeframes (e.g., do not call once for daily and once for weekly). Calculate weekly/monthly trends from the daily data provided.',
-    // '- Use "get_aggs" (OHLCV) or equivalent tools to gather historical data for each timeframe. (Do not look at materials older than 3 years.)',
-    // '- **Short-term (Daily)**: Check Momentum (RSI/MACD logic) and Volume spikes.',
-    // '- **Mid-term (Weekly)**: Identify Trends (MA20/MA50) and Patterns.',
-    // '- **Long-term (Monthly)**: Assess Macro Trend vs MA200.',
-    // '- **Action**: Calculate specific Support/Resistance levels and Stop-Loss zones.',
 
     // Step 3: Synthesis & Writing (Origin: Writer Agent)
     '**Step 3: Synthesis & Reporting**',
@@ -42,14 +36,38 @@ const prompt = buildPromptWithContext(app => [
 
     // 3. Output Structure
     '## Final Report Structure (Markdown):',
-    '  - **Part 1: 市場情緒與消息面分析** (Include Sentiment Score & Catalysts)',
-    '  - **Part 2: 短中長期技術分析** (Include OHLCV insights & Trends)',
-    '  - **Part 3: 操作建議與策略** (Synthesized verdict with specific Entry/Profit/Stop-Loss levels)',
-    '  - Explicitly state: "短線(1-4週)", "中線(1-3月)", "長線(半年以上)" strategies.',
+
+    '  - **Part 1: 市場情緒與消息面分析**',
+    '    - **Must start with a "Sentiment Dashboard" list:**',
+    '      - **整體情緒標籤**: [樂觀 | 保留 | 悲觀]',
+    '      - **短線消息面預期**: [看漲 | 看跌] (Brief Reason)',
+    '      - **長線基本面預期**: [看漲 | 看跌] (Brief Reason)',
+    '    - **Key Catalysts**: Summarize top 3 drivers.',
+
+    '  - **Part 2: 短中長期技術分析**',
+    '    - **Price Structure**: Briefly describe the current trend (e.g., "Uptrend", "Correction", "Consolidation").',
+    '    - **Key Technical Levels (Must be specific numbers):**',
+    '      - **Support (支撐)**: [Level 1], [Level 2]',
+    '      - **Resistance (壓力)**: [Level 1], [Level 2]',
+    '    - **Indicator Signals**: RSI status, MACD momentum, Volume trend.',
+
+    '  - **Part 3: 實戰操作策略 (Action Plan)**',
+    '    - **Strategy Summary**: One sentence verdict.',
+    '    - **Scenario Analysis (Strict IF-THEN format):**',
+    '      - **Scenario A (Bullish/Breakout):** "IF price breaks [Price], THEN Target [Price], Stop Loss [Price]."',
+    '      - **Scenario B (Bearish/Correction):** "IF price drops below [Price], THEN wait at [Price], Stop Loss [Price]."',
+    '      - **Scenario C (Accumulation):** "Buy Zone: [Price Range], Allocation: [Percent]."',
+    // Part 4: Risks
+
+    '  - **Part 4: 關鍵風險 (Top 3 only)**',
 
     // 4. Constraints
-    'Output MUST be in Traditional Chinese (繁體中文).',
-    'Do not hallucinate data. If data is missing, state "Insufficient Data".'
+    '## Style Guidelines:',
+    '- **NO FLUFF**: Remove phrases like "Based on the data", "I think", "The chart shows". Just state the facts.',
+    '- **NO REPETITION**: Do not repeat the same disclaimer multiple times.',
+    '- **Direct & Professional**: Use a tone similar to a Bloomberg Terminal summary.',
+    '- Output MUST be in Traditional Chinese (繁體中文).',
+    '- Do not hallucinate data. If data is missing, simply state "Insufficient Data" once at the end.'
 ].join('\n'));
 
 export const FinancialReportData = z.object({
