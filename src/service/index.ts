@@ -20,7 +20,7 @@ export class Service {
                     "- `/analyse BRK.B`",
                 ].join("\n"))
             })
-            telegraf.command("analyse", async (ctx) => {
+            telegraf.command(["a" , "analyse"], async (ctx) => {
                 if (!chatIDWhitelist.includes(ctx.chat?.id)) return ctx.reply("This bot is not available in this chat.")
                 if (!ctx.text) return ctx.reply(
                     "Please send a code to analyze"
