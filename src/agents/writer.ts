@@ -14,60 +14,61 @@ const prompt = buildPromptWithContext(app => [
 
     // Step 1: Gather & Analyze News (Origin: News Analyst)
     '**Step 1: News & Sentiment Analysis**',
-    '- Call "list_ticker_news" **EXACTLY ONCE**. Set the limit parameter to 50 (or max available) to get all necessary data in one shot.',
-    '- **DO NOT** paginate or make follow-up calls for older news. Analyze ONLY what you get in the first batch.',
+    '- Call "list_ticker_news" **EXACTLY ONCE**. Set limit to 50.',
+    '- **DO NOT** paginate. Analyze ONLY the first batch.',
     '- Filter out duplicates internally.',
-    '- **Mandatory Classification**: Based on the news, you MUST determine the following:',
-    '  1. **Overall Mood**: Choose EXACTLY ONE from ["樂觀 (Optimistic)", "保留 (Reserved)", "悲觀 (Pessimistic)"].',
-    '  2. **Short-term View (News/Catalyst driven)**: Choose ["看漲 (Bullish)", "看跌 (Bearish)", "震盪 (Neutral)"].',
-    '  3. **Long-term View (Fundamental driven)**: Choose ["看漲 (Bullish)", "看跌 (Bearish)", "中性 (Neutral)"].',
+    '- **Mandatory Classification**: Determine:',
+    '  1. **Overall Mood**: ["樂觀", "觀望", "悲觀"]',
+    '  2. **Short-term View**: ["看漲", "看跌", "震盪"]',
+    '  3. **Long-term View**: ["看漲", "看跌", "中性"]',
 
     // Step 2: Gather & Analyze Technicals (Origin: Financial Analyst)
     '**Step 2: Technical Analysis**',
-    '- Call "get_aggs" **EXACTLY ONCE**.',
-    '- Request a wide date range (e.g., past 365 days) in a single request to cover Short/Mid/Long-term needs.',
-    '- **DO NOT** call the tool multiple times for different timeframes (e.g., do not call once for daily and once for weekly). Calculate weekly/monthly trends from the daily data provided.',
+    '- Call "get_aggs" **EXACTLY ONCE** (past 365 days).',
+    '- **DO NOT** make multiple calls. Calculate Weekly/Monthly trends internally.',
 
     // Step 3: Synthesis & Writing (Origin: Writer Agent)
     '**Step 3: Synthesis & Reporting**',
-    '- Cross-reference Step 1 & Step 2. (e.g., "News is bullish but Price is hitting resistance").',
-    '- Write the final report in Markdown format.',
-    '- Ensure the tone is professional, objective, and actionable.',
+    '- Synthesize News and Technicals.',
+    '- **Rounding Rule**: Round all price levels to reasonable trading decimals (e.g., 2 decimal places max, prefer zones like 88.50-89.00 over 88.76).',
 
     // 3. Output Structure
     '## Final Report Structure (Markdown):',
 
-    '  - **Part 1: 市場情緒與消息面分析**',
-    '    - **Must start with a "Sentiment Dashboard" list:**',
-    '      - **整體情緒標籤**: [樂觀 | 保留 | 悲觀]',
-    '      - **短線消息面預期**: [看漲 | 看跌] (Brief Reason)',
-    '      - **長線基本面預期**: [看漲 | 看跌] (Brief Reason)',
-    '    - **Key Catalysts**: Summarize top 3 drivers.',
+    '  - **Part 1: 市場情緒與消息面儀表板**',
+    '    - **情緒儀表板 (List):**',
+    '      - **整體情緒**: [樂觀 | 觀望 | 悲觀] (Score: 0-100)',
+    '      - **短線消息預期**: [看漲 | 看跌 | 震盪] (簡述原因, 15字內)',
+    '      - **長線基本預期**: [看漲 | 看跌 | 中性] (簡述原因, 15字內)',
+    '    - **重點新聞摘要 (Bullet points):** 列出最重要的 3 點，每點不超過 20 字。',
+    '    - **關鍵催化劑 (Catalysts):** 列出 Top 3 驅動因素。',
 
     '  - **Part 2: 短中長期技術分析**',
-    '    - **Price Structure**: Briefly describe the current trend (e.g., "Uptrend", "Correction", "Consolidation").',
-    '    - **Key Technical Levels (Must be specific numbers):**',
-    '      - **Support (支撐)**: [Level 1], [Level 2]',
-    '      - **Resistance (壓力)**: [Level 1], [Level 2]',
-    '    - **Indicator Signals**: RSI status, MACD momentum, Volume trend.',
+    '    - **價格結構**: 用一句話描述當前趨勢 (如: "高檔震盪", "底部反彈").',
+    '    - **關鍵技術價位 (使用區間或整數):**',
+    '      - **支撐 (Support)**: [價位區間 1], [價位區間 2]',
+    '      - **壓力 (Resistance)**: [價位區間 1], [價位區間 2]',
+    '    - **指標訊號 (Format: Indicator: Value/Status - Interpretation):**',
+    '      - **RSI**: [數值/狀態] - [簡評]',
+    '      - **MACD**: [動能狀態] - [簡評]',
+    '      - **Volume**: [量能趨勢] - [簡評]',
 
     '  - **Part 3: 實戰操作策略 (Action Plan)**',
-    '    - **Strategy Summary**: One sentence verdict.',
-    '    - **Scenario Analysis (Strict IF-THEN format):**',
-    '      - **Scenario A (Bullish/Breakout):** "IF price breaks [Price], THEN Target [Price], Stop Loss [Price]."',
-    '      - **Scenario B (Bearish/Correction):** "IF price drops below [Price], THEN wait at [Price], Stop Loss [Price]."',
-    '      - **Scenario C (Accumulation):** "Buy Zone: [Price Range], Allocation: [Percent]."',
+    '    - **策略總結**: 一句話結論。',
+    '    - **情境分析 (嚴格使用 IF-THEN 格式):**',
+    '      - **情境 A (多頭突破)**: "若股價突破 **[價位]**，則目標 **[價位]**，停損 **[價位]**。"',
+    '      - **情境 B (拉回佈局)**: "若回測 **[價位]** 不破，分批進場，目標 **[價位]**，停損 **[價位]**。"',
+    '      - **情境 C (長線核心)**: "建議在 **[價位區間]** 建立核心部位 (倉位 %)。"',
     // Part 4: Risks
 
-    '  - **Part 4: 關鍵風險 (Top 3 only)**',
+    '  - **Part 4: 關鍵風險 (僅列 Top 3)**',
 
     // 4. Constraints
     '## Style Guidelines:',
-    '- **NO FLUFF**: Remove phrases like "Based on the data", "I think", "The chart shows". Just state the facts.',
-    '- **NO REPETITION**: Do not repeat the same disclaimer multiple times.',
-    '- **Direct & Professional**: Use a tone similar to a Bloomberg Terminal summary.',
+    '- **NO ENGLISH HEADERS**: All section headers MUST be in Traditional Chinese.',
+    '- **NO FLUFF**: Go straight to the point.',
     '- Output MUST be in Traditional Chinese (繁體中文).',
-    '- Do not hallucinate data. If data is missing, simply state "Insufficient Data" once at the end.'
+    '- If data is missing, state "Insufficient Data".'
 ].join('\n'));
 
 export const FinancialReportData = z.object({
