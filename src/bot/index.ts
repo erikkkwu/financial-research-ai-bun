@@ -10,7 +10,7 @@ export interface Bot {
 export class TelegramBot implements Bot {
     private readonly telegraf: Telegraf<Context>;
     constructor() {
-        this.telegraf = new Telegraf("8404879341:AAH7SfnKUkED5RopkcbSfQi_P-yKYCTen4s", {
+        this.telegraf = new Telegraf(process.env.TELEGRAM_BOT_TOKEN!, {
             handlerTimeout: 60 * 60 * 1000
         })
     }

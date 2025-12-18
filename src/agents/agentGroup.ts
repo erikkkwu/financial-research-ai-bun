@@ -4,18 +4,38 @@ import {plannerAgent} from "./plannerAgent.js";
 import {newsAnalystAgent} from "./newsAnalyst.js";
 import {FinancialReportData, type FinancialReportDataType,  writerAgent } from "./writer.js";
 import {financialAnalystAgent} from "./financialAnalyst.js";
+import {MarkdownReport, masterAgent , type MarkdownReportType} from "./master.js";
 
 export interface IAgentGroup {
     run(query: string , context: AppContext): Promise<FinancialReportDataType>;
+    runMaster(query: string): Promise<MarkdownReportType>;
 }
 
 export class AgentGroup implements IAgentGroup {
-    constructor(private plannerAgent: Agent<any,any> , private financialAnalystAgent: Agent<AppContext> , private newsAnalystAgent: Agent<AppContext>, private writerAgent: Agent<AppContext, typeof FinancialReportData> ) {
+    constructor(private plannerAgent: Agent<any,any> , private financialAnalystAgent: Agent<AppContext> , private newsAnalystAgent: Agent<AppContext>, private writerAgent: Agent<AppContext, typeof FinancialReportData> , private masterAgent: Agent<AppContext , typeof MarkdownReport> ) {
         this.setupAgentSettings()
     }
 
+    async runMaster(query: string): Promise<MarkdownReportType> {
+        await this.connectMCPServers();
+
+        try {
+            const result = await run(this.masterAgent, query);
+            const parsed = MarkdownReport.safeParse(result.finalOutput);
+
+            if (!parsed.success) {
+                throw new Error(`Failed to parse output: ${parsed.error.message}`);
+            }
+
+            return result.finalOutput
+        }
+        finally {
+            await this.closeMCPServers();
+        }
+    }
+
     private get allAgents(){
-        return [this.plannerAgent , this.financialAnalystAgent , this.newsAnalystAgent , this.writerAgent]
+        return [this.plannerAgent , this.financialAnalystAgent , this.newsAnalystAgent , this.writerAgent, this.masterAgent]
     }
 
     async run(query: string , context: AppContext): Promise<FinancialReportDataType> {
@@ -24,23 +44,6 @@ export class AgentGroup implements IAgentGroup {
         console.log('connected to MCP servers.')
 
         try {
-            // const newsAnalystTool = this.newsAnalystAgent.asTool({
-            //     toolName: 'news_analyst',
-            //     toolDescription: 'A news analyst who provides market sentiment and catalysts.',
-            // });
-            // const financialAnalystTool = this.financialAnalystAgent.asTool({
-            //     toolName: 'financial_analyst',
-            //     toolDescription: 'A financial analyst who provides technical analysis and market sentiment.',
-            // });
-            //
-            // const agent = writerAgent.clone({
-            //     tools: [ newsAnalystTool , financialAnalystTool ]
-            // });
-
-            // const result = await run(agent, query , {
-            //     context: context,
-            // });
-
             const result = await run(writerAgent, query , {
                 context: context,
             });
@@ -79,6 +82,7 @@ export class AgentGroup implements IAgentGroup {
         // this.financialAnalystAgent.mcpServers.push(massiveMCPServer);
         // this.newsAnalystAgent.mcpServers.push(massiveMCPServer);
         this.writerAgent.mcpServers.push(massiveMCPServer);
+        this.masterAgent.mcpServers.push(massiveMCPServer);
         // this.plannerAgent.handoffs.push(financialAnalystAgent , newsAnalystAgent , writerAgent);
         // this.financialAnalystAgent.handoffs.push(this.plannerAgent);
         // this.writerAgent.handoffs.push(this.plannerAgent);
@@ -102,5 +106,5 @@ export class AgentGroup implements IAgentGroup {
 }
 
 export const createAgentGroup = () : AgentGroup => {
-    return new AgentGroup(plannerAgent, financialAnalystAgent, newsAnalystAgent, writerAgent);
+    return new AgentGroup(plannerAgent, financialAnalystAgent, newsAnalystAgent, writerAgent , masterAgent);
 }
