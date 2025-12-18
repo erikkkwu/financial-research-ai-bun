@@ -19,8 +19,11 @@ export class AgentGroup implements IAgentGroup {
     async runMaster(query: string): Promise<MarkdownReportType> {
         await this.connectMCPServers();
 
+        console.log('connected to MCP servers.')
         try {
+
             const result = await run(this.masterAgent, query);
+            console.log('got report')
             const parsed = MarkdownReport.safeParse(result.finalOutput);
 
             if (!parsed.success) {
@@ -48,6 +51,7 @@ export class AgentGroup implements IAgentGroup {
                 context: context,
             });
 
+            console.log('got report')
             const parsed = FinancialReportData.safeParse(result.finalOutput);
 
             if (!parsed.success) {

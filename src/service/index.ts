@@ -30,6 +30,8 @@ export class Service {
                 const [_, prompt ] = ctx.text?.split("/b ");
                 if (!prompt) return ctx.reply("Please send a prompt to analyze")
 
+                console.log(prompt)
+                await ctx.reply(`Generating report...(閉嘴乖乖等)`)
                 try {
                     const report = await this.agentGroup.runMaster(prompt);
                     await this.sendMarkdownReport(ctx,report.markdown_report)
