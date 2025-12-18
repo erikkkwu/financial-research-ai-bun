@@ -1,4 +1,4 @@
-import {type Agent, MCPServerStdio, run  } from "@openai/agents";
+import {type Agent, MCPServerStdio, run , createMCPToolStaticFilter } from "@openai/agents";
 import type {AppContext} from "./context.ts";
 import {plannerAgent} from "./plannerAgent.js";
 import {newsAnalystAgent} from "./newsAnalyst.js";
@@ -102,6 +102,18 @@ export class AgentGroup implements IAgentGroup {
                 'git+https://github.com/massive-com/mcp_massive@v0.7.0',
                 'mcp_massive'
             ],
+            toolFilter: createMCPToolStaticFilter({
+                allowed: [
+                    'get_aggs',
+                    'get_previous_close_agg',
+                    'get_snapshot_ticker',
+                    'get_market_status',
+                    'get_ticker_details',
+                    'list_dividends',
+                    'list_splits',
+                    'list_ticker_news'
+                ],
+            }),
             env: {
                 MASSIVE_API_KEY: process.env.MASSIVE_API_KEY!
             }
