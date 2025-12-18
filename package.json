@@ -13,7 +13,7 @@
     "@langchain/textsplitters" : "1.0.1",
     "telegramify-markdown" : "1.3.0",
     "typescript": "5.9.3",
-    "yahoo-finance2": "^3.10.2",
+    "yahoo-finance2": "3.10.2",
     "cache-manager" : "^7.2.7",
     "@keyv/memcache" : "^2.0.2",
     "@stoqey/finnhub" : "^0.3.4",

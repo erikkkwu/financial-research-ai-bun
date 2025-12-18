@@ -16,6 +16,7 @@ export const getStockHistorical = tool({
     }),
     execute: async ({symbol, period, interval = "1d"}) => {
         try {
+            console.log('get_stock_historical tool call with:',symbol, period, interval)
             const queryOptions = {
                 period1: getStartDate(period),
                 period2: new Date(),
@@ -23,9 +24,9 @@ export const getStockHistorical = tool({
             };
 
             const finance = new yahooFinance();
-            return await finance.historical(symbol, queryOptions);
+            return await finance.chart(symbol, queryOptions);
         } catch (e) {
-            console.error(e)
+            console.error('get_stock_historical', e)
             return e instanceof Error ? e.message : "Unknown error occurred";
         }
     }
@@ -39,12 +40,13 @@ export const getQuoteSummary = tool({
     }),
     execute: async ({symbol}) => {
         try {
+            console.log('get_quote_summary tool call with:',symbol)
             const finance = new yahooFinance();
             return await finance.quoteSummary(symbol, {
                 modules: 'all'
             });
         } catch (e) {
-            console.error(e)
+            console.error('get_quote_summary',e)
             return e instanceof Error ? e.message : "Unknown error occurred";
         }
     }
@@ -63,6 +65,7 @@ export const getFundamentalsTimeSeries = tool({
     }),
     execute: async ({symbol , period,  type = "quarterly" }) => {
         try {
+            console.log('get_fundamentals_time_series tool call with:',symbol, period, type)
             const queryOptions = {
                 period1: getStartDate(period),
                 period2: new Date(),
@@ -80,6 +83,7 @@ export const getFundamentalsTimeSeries = tool({
                 return `Missing total assets data for ${quarter.date}`
             });
         } catch (e) {
+            console.error('get_fundamentals_time_series',e)
             return e instanceof Error ? e.message : "Unknown error occurred";
         }
     }

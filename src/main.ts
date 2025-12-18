@@ -7,6 +7,8 @@ setDefaultResultOrder("ipv6first");
 const telegramBot = new TelegramBot();
 const agentGroup = createAgentGroup();
 const symbolStore = new SymbolStore()
+await symbolStore.getOrFetchSymbols()
+
 const service = new Service(telegramBot , agentGroup , symbolStore);
 await service.start();
 process.once('SIGINT', gracefulShutdown);

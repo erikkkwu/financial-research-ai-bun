@@ -22,13 +22,13 @@ export class SymbolStore {
         return (await this.getOrFetchSymbols()).includes(symbol)
     }
 
-    private async getOrFetchSymbols() {
+    async getOrFetchSymbols() {
         const symbols = await this.cache.get<string[]>('allSymbols');
         if (symbols) {
             return symbols;
         }
 
-        const symbolsResp = await this.apiClient.api.get<SymbolResponse[]>('/stock/symbol?exchange=US');
+        const symbolsResp = await this.apiClient.api.get<SymbolResponse[]>(`/stock/symbol?exchange=US&&token=${process.env.FINNHUB_API_KEY!}`);
         await this.cache.set('allSymbols', symbolsResp.data.map(s => s.symbol), 60 * 60 * 1000);
         return symbolsResp.data.map(s => s.symbol);
     }
