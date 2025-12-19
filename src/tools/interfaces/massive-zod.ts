@@ -5020,36 +5020,36 @@ export const defaultApiGetOptionsChainRequestSchema = z.object({
 
 export const defaultApiGetOptionsEmaRequestSchema = z.object({
     optionsTicker: z.string().describe('Specify a case-sensitive ticker symbol for which to get exponential moving average (EMA) data. For example, AAPL represents Apple Inc.'),
-    timestamp: z.iso.date().optional().describe('Query by timestamp. Either a date with the format YYYY-MM-DD or a millisecond timestamp.'),
-    timespan: getOptionsEmaTimespanEnumSchema.optional().describe('The size of the aggregate time window.'),
-    adjusted: z.boolean().optional().describe('Whether or not the aggregates used to calculate the exponential moving average are adjusted for splits. By default, aggregates are adjusted. Set this to false to get results that are NOT adjusted for splits.'),
-    window:  z.number().int().optional().describe('The window size used to calculate the exponential moving average (EMA). i.e. a window size of 10 with daily aggregates would result in a 10 day moving average.'),
-    seriesType: getOptionsEmaSeriesTypeEnumSchema.optional().describe("The price in the aggregate which will be used to calculate the exponential moving average. i.e. 'close' will result in using close prices to calculate the exponential moving average (EMA)."),
-    expandUnderlying: z.boolean().optional().describe('Whether or not to include the aggregates used to calculate this indicator in the response.'),
-    order: getOptionsEmaOrderEnumSchema.optional().describe('The order in which to return the results, ordered by timestamp.'),
-    limit:  z.number().int().max(5000).optional().default(10).describe('Limit the number of results returned, default is 10 and max is 5000'),
-    timestampGte: z.string().optional().describe('Search timestamp for values that are greater than or equal to the given value.'),
-    timestampGt: z.string().optional().describe('Search timestamp for values that are greater than the given value.'),
-    timestampLte: z.string().optional().describe('Search timestamp for values that are less than or equal to the given value.'),
-    timestampLt: z.string().optional().describe('Search timestamp for values that are less than the given value.')
+    timestamp: z.iso.date().nullable().describe('Query by timestamp. Either a date with the format YYYY-MM-DD or a millisecond timestamp.'),
+    timespan: getOptionsEmaTimespanEnumSchema.nullish().describe('The size of the aggregate time window.'),
+    adjusted: z.boolean().nullish().describe('Whether or not the aggregates used to calculate the exponential moving average are adjusted for splits. By default, aggregates are adjusted. Set this to false to get results that are NOT adjusted for splits.'),
+    window:  z.number().int().nullish().describe('The window size used to calculate the exponential moving average (EMA). i.e. a window size of 10 with daily aggregates would result in a 10 day moving average.'),
+    seriesType: getOptionsEmaSeriesTypeEnumSchema.nullish().describe("The price in the aggregate which will be used to calculate the exponential moving average. i.e. 'close' will result in using close prices to calculate the exponential moving average (EMA)."),
+    expandUnderlying: z.boolean().nullish().describe('Whether or not to include the aggregates used to calculate this indicator in the response.'),
+    order: getOptionsEmaOrderEnumSchema.nullish().describe('The order in which to return the results, ordered by timestamp.'),
+    limit:  z.number().int().max(5000).nullish().default(10).describe('Limit the number of results returned, default is 10 and max is 5000'),
+    timestampGte: z.string().nullish().describe('Search timestamp for values that are greater than or equal to the given value.'),
+    timestampGt: z.string().nullish().describe('Search timestamp for values that are greater than the given value.'),
+    timestampLte: z.string().nullish().describe('Search timestamp for values that are less than or equal to the given value.'),
+    timestampLt: z.string().nullish().describe('Search timestamp for values that are less than the given value.')
 });
 
 export const defaultApiGetOptionsMacdRequestSchema = z.object({
     optionsTicker: z.string().describe('Specify a case-sensitive ticker symbol for which to get moving average convergence/divergence (MACD) data. For example, AAPL represents Apple Inc.'),
-    timestamp: z.iso.date().optional().describe('Query by timestamp. Either a date with the format YYYY-MM-DD or a millisecond timestamp.'),
-    timespan: getOptionsMacdTimespanEnumSchema.optional().describe('The size of the aggregate time window.'),
-    adjusted: z.boolean().optional().describe('Whether or not the aggregates used to calculate the MACD are adjusted for splits. By default, aggregates are adjusted. Set this to false to get results that are NOT adjusted for splits.'),
-    shortWindow: z.number().int().optional().describe('The short window size used to calculate MACD data.'),
-    longWindow: z.number().int().optional().describe('The long window size used to calculate MACD data.'),
-    signalWindow: z.number().int().optional().describe('The window size used to calculate the MACD signal line.'),
-    seriesType: getOptionsMacdSeriesTypeEnumSchema.optional().describe("The price in the aggregate which will be used to calculate the MACD. i.e. 'close' will result in using close prices to calculate the MACD."),
-    expandUnderlying: z.boolean().optional().describe('Whether or not to include the aggregates used to calculate this indicator in the response.'),
-    order: getOptionsMacdOrderEnumSchema.optional().describe('The order in which to return the results, ordered by timestamp.'),
-    limit:  z.number().int().optional().describe('Limit the number of results returned, default is 10 and max is 5000'),
-    timestampGte: z.string().optional().describe('Search timestamp for values that are greater than or equal to the given value.'),
-    timestampGt: z.string().optional().describe('Search timestamp for values that are greater than the given value.'),
-    timestampLte: z.string().optional().describe('Search timestamp for values that are less than or equal to the given value.'),
-    timestampLt: z.string().optional().describe('Search timestamp for values that are less than the given value.')
+    timestamp: z.iso.date().nullish().describe('Query by timestamp. Either a date with the format YYYY-MM-DD or a millisecond timestamp.'),
+    timespan: getOptionsMacdTimespanEnumSchema.nullish().describe('The size of the aggregate time window.'),
+    adjusted: z.boolean().nullish().describe('Whether or not the aggregates used to calculate the MACD are adjusted for splits. By default, aggregates are adjusted. Set this to false to get results that are NOT adjusted for splits.'),
+    shortWindow: z.number().int().nullish().describe('The short window size used to calculate MACD data.'),
+    longWindow: z.number().int().nullish().describe('The long window size used to calculate MACD data.'),
+    signalWindow: z.number().int().nullish().describe('The window size used to calculate the MACD signal line.'),
+    seriesType: getOptionsMacdSeriesTypeEnumSchema.nullish().describe("The price in the aggregate which will be used to calculate the MACD. i.e. 'close' will result in using close prices to calculate the MACD."),
+    expandUnderlying: z.boolean().nullish().describe('Whether or not to include the aggregates used to calculate this indicator in the response.'),
+    order: getOptionsMacdOrderEnumSchema.nullish().describe('The order in which to return the results, ordered by timestamp.'),
+    limit:  z.number().int().nullish().describe('Limit the number of results returned, default is 10 and max is 5000'),
+    timestampGte: z.string().nullish().describe('Search timestamp for values that are greater than or equal to the given value.'),
+    timestampGt: z.string().nullish().describe('Search timestamp for values that are greater than the given value.'),
+    timestampLte: z.string().nullish().describe('Search timestamp for values that are less than or equal to the given value.'),
+    timestampLt: z.string().nullish().describe('Search timestamp for values that are less than the given value.')
 });
 
 export const defaultApiGetOptionsQuotesRequestSchema = z.object({
@@ -5066,34 +5066,34 @@ export const defaultApiGetOptionsQuotesRequestSchema = z.object({
 
 export const defaultApiGetOptionsRsiRequestSchema = z.object({
     optionsTicker: z.string().describe('Specify a case-sensitive ticker symbol for which to get relative strength index (RSI) data. For example, AAPL represents Apple Inc.'),
-    timestamp: z.iso.date().optional().describe('Query by timestamp. Either a date with the format YYYY-MM-DD or a millisecond timestamp.'),
-    timespan: getOptionsRsiTimespanEnumSchema.optional().describe('The size of the aggregate time window.'),
-    adjusted: z.boolean().optional().describe('Whether or not the aggregates used to calculate the relative strength index are adjusted for splits. By default, aggregates are adjusted. Set this to false to get results that are NOT adjusted for splits.'),
-    window: z.number().int().optional().describe('The window size used to calculate the relative strength index (RSI).'),
-    seriesType: getOptionsRsiSeriesTypeEnumSchema.optional().describe("The price in the aggregate which will be used to calculate the relative strength index. i.e. 'close' will result in using close prices to calculate the relative strength index (RSI)."),
-    expandUnderlying: z.boolean().optional().describe('Whether or not to include the aggregates used to calculate this indicator in the response.'),
-    order: getOptionsRsiOrderEnumSchema.optional().describe('The order in which to return the results, ordered by timestamp.'),
-    limit:  z.number().int().max(5000).optional().default(10).describe('Limit the number of results returned, default is 10 and max is 5000'),
-    timestampGte: z.string().optional().describe('Search timestamp for values that are greater than or equal to the given value.'),
-    timestampGt: z.string().optional().describe('Search timestamp for values that are greater than the given value.'),
-    timestampLte: z.string().optional().describe('Search timestamp for values that are less than or equal to the given value.'),
-    timestampLt: z.string().optional().describe('Search timestamp for values that are less than the given value.')
+    timestamp: z.iso.date().nullish().describe('Query by timestamp. Either a date with the format YYYY-MM-DD or a millisecond timestamp.'),
+    timespan: getOptionsRsiTimespanEnumSchema.nullish().describe('The size of the aggregate time window.'),
+    adjusted: z.boolean().nullish().describe('Whether or not the aggregates used to calculate the relative strength index are adjusted for splits. By default, aggregates are adjusted. Set this to false to get results that are NOT adjusted for splits.'),
+    window: z.number().int().nullish().describe('The window size used to calculate the relative strength index (RSI).'),
+    seriesType: getOptionsRsiSeriesTypeEnumSchema.nullish().describe("The price in the aggregate which will be used to calculate the relative strength index. i.e. 'close' will result in using close prices to calculate the relative strength index (RSI)."),
+    expandUnderlying: z.boolean().nullish().describe('Whether or not to include the aggregates used to calculate this indicator in the response.'),
+    order: getOptionsRsiOrderEnumSchema.nullish().describe('The order in which to return the results, ordered by timestamp.'),
+    limit:  z.number().int().max(5000).nullish().default(10).describe('Limit the number of results returned, default is 10 and max is 5000'),
+    timestampGte: z.string().nullish().describe('Search timestamp for values that are greater than or equal to the given value.'),
+    timestampGt: z.string().nullish().describe('Search timestamp for values that are greater than the given value.'),
+    timestampLte: z.string().nullish().describe('Search timestamp for values that are less than or equal to the given value.'),
+    timestampLt: z.string().nullish().describe('Search timestamp for values that are less than the given value.')
 });
 
 export const defaultApiGetOptionsSmaRequestSchema = z.object({
     optionsTicker: z.string().describe('Specify a case-sensitive ticker symbol for which to get simple moving average (SMA) data. For example, AAPL represents Apple Inc.'),
-    timestamp: z.iso.date().optional().describe('Query by timestamp. Either a date with the format YYYY-MM-DD or a millisecond timestamp.'),
-    timespan: getOptionsSmaTimespanEnumSchema.optional().describe('The size of the aggregate time window.'),
-    adjusted: z.boolean().optional().describe('Whether or not the aggregates used to calculate the simple moving average are adjusted for splits. By default, aggregates are adjusted. Set this to false to get results that are NOT adjusted for splits.'),
-    window:  z.number().int().optional().describe('The window size used to calculate the simple moving average (SMA). i.e. a window size of 10 with daily aggregates would result in a 10 day moving average.'),
-    seriesType: getOptionsSmaSeriesTypeEnumSchema.optional().describe("The price in the aggregate which will be used to calculate the simple moving average. i.e. 'close' will result in using close prices to calculate the simple moving average (SMA)."),
-    expandUnderlying: z.boolean().optional().describe('Whether or not to include the aggregates used to calculate this indicator in the response.'),
-    order: getOptionsSmaOrderEnumSchema.optional().describe('The order in which to return the results, ordered by timestamp.'),
-    limit:  z.number().int().max(5000).optional().default(10).describe('Limit the number of results returned, default is 10 and max is 5000'),
-    timestampGte: z.string().optional().describe('Search timestamp for values that are greater than or equal to the given value.'),
-    timestampGt: z.string().optional().describe('Search timestamp for values that are greater than the given value.'),
-    timestampLte: z.string().optional().describe('Search timestamp for values that are less than or equal to the given value.'),
-    timestampLt: z.string().optional().describe('Search timestamp for values that are less than the given value.')
+    timestamp: z.iso.date().nullish().describe('Query by timestamp. Either a date with the format YYYY-MM-DD or a millisecond timestamp.'),
+    timespan: getOptionsSmaTimespanEnumSchema.nullish().describe('The size of the aggregate time window.'),
+    adjusted: z.boolean().nullish().describe('Whether or not the aggregates used to calculate the simple moving average are adjusted for splits. By default, aggregates are adjusted. Set this to false to get results that are NOT adjusted for splits.'),
+    window:  z.number().int().nullish().describe('The window size used to calculate the simple moving average (SMA). i.e. a window size of 10 with daily aggregates would result in a 10 day moving average.'),
+    seriesType: getOptionsSmaSeriesTypeEnumSchema.nullish().describe("The price in the aggregate which will be used to calculate the simple moving average. i.e. 'close' will result in using close prices to calculate the simple moving average (SMA)."),
+    expandUnderlying: z.boolean().nullish().describe('Whether or not to include the aggregates used to calculate this indicator in the response.'),
+    order: getOptionsSmaOrderEnumSchema.nullish().describe('The order in which to return the results, ordered by timestamp.'),
+    limit:  z.number().int().max(5000).nullish().default(10).describe('Limit the number of results returned, default is 10 and max is 5000'),
+    timestampGte: z.string().nullish().describe('Search timestamp for values that are greater than or equal to the given value.'),
+    timestampGt: z.string().nullish().describe('Search timestamp for values that are greater than the given value.'),
+    timestampLte: z.string().nullish().describe('Search timestamp for values that are less than or equal to the given value.'),
+    timestampLt: z.string().nullish().describe('Search timestamp for values that are less than the given value.')
 });
 
 export const defaultApiGetOptionsTradesRequestSchema = z.object({

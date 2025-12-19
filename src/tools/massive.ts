@@ -8,6 +8,7 @@ const getClient = () => restClient(process.env.MASSIVE_API_KEY!,"https://api.mas
     pagination: true
 });
 export const getSMA = tool({
+    name: 'get_sma',
     description: "Retrieve the Simple Moving Average (SMA) for a specified ticker over a defined time range. The SMA calculates the average price across a set number of periods, smoothing price fluctuations to reveal underlying trends and potential signals. Use Cases: Trend analysis, trading signal generation (e.g., SMA crossovers), identifying support/resistance, and refining entry/exit timing.",
     parameters: defaultApiGetOptionsSmaRequestSchema,
     execute: async (input: ToolExecuteArgument<DefaultApiGetOptionsSmaRequestSchema>) => {
@@ -22,6 +23,7 @@ export const getSMA = tool({
 
 type DefaultApiGetOptionsEmaRequestSchema = z.infer<typeof defaultApiGetOptionsEmaRequestSchema>;
 export const getEMA = tool({
+    name: 'get_ema',
     description: "Retrieve the Exponential Moving Average (EMA) for a specified ticker over a defined time range. The EMA places greater weight on recent prices, enabling quicker trend detection and more responsive signals. Use Cases: Trend identification, EMA crossover signals, dynamic support/resistance levels, and adjusting strategies based on recent market volatility.",
     parameters: defaultApiGetOptionsEmaRequestSchema,
     execute: async (input: ToolExecuteArgument<DefaultApiGetOptionsEmaRequestSchema>) => {
@@ -38,11 +40,12 @@ export const getEMA = tool({
 
 type DefaultApiGetOptionsMacdRequestSchema = z.infer<typeof defaultApiGetOptionsMacdRequestSchema>;
 export const getMACD = tool({
+    name: 'get_macd',
     description: 'Retrieve the Moving Average Convergence/Divergence (MACD) for a specified ticker over a defined time range. MACD is a momentum indicator derived from two moving averages, helping to identify trend strength, direction, and potential trading signals. ***Use Cases:*** Momentum analysis, signal generation (crossover events), spotting overbought/oversold conditions, and confirming trend directions.',
     parameters: defaultApiGetOptionsMacdRequestSchema,
     execute: async (input: ToolExecuteArgument<DefaultApiGetOptionsMacdRequestSchema>)=>{
         try {
-            const response = await getClient().getCryptoMACD(input);
+            const response = await getClient().getOptionsMACD(input);
             return response.results;
         }
         catch (e) {
@@ -53,6 +56,7 @@ export const getMACD = tool({
 
 type DefaultApiGetOptionsRsiRequestSchema = z.infer<typeof defaultApiGetOptionsRsiRequestSchema>;
 export const getRSI = tool({
+    name: 'get_rsi',
     description: 'Retrieve the Relative Strength Index (RSI) for a specified ticker over a defined time range. The RSI measures the speed and magnitude of price changes, oscillating between 0 and 100 to help identify overbought or oversold conditions. ***Use Cases:*** Overbought/oversold detection, divergence analysis, trend confirmation, and refining market entry/exit strategies.',
     parameters: defaultApiGetOptionsRsiRequestSchema,
     execute: async (input: ToolExecuteArgument<DefaultApiGetOptionsRsiRequestSchema>)=>{
