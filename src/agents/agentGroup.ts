@@ -5,6 +5,7 @@ import {newsAnalystAgent} from "./newsAnalyst.js";
 import {FinancialReportData, type FinancialReportDataType,  writerAgent } from "./writer.js";
 import {financialAnalystAgent} from "./financialAnalyst.js";
 import {MarkdownReport, masterAgent , type MarkdownReportType} from "./master.js";
+import {getEMA, getMACD, getRSI, getSMA} from "../tools/massive.js";
 
 export interface IAgentGroup {
     run(query: string , context: AppContext): Promise<FinancialReportDataType>;
@@ -83,14 +84,10 @@ export class AgentGroup implements IAgentGroup {
 
     private setupAgentSettings() {
         const massiveMCPServer = this.getMassiveMCPServer();
-        // this.financialAnalystAgent.mcpServers.push(massiveMCPServer);
-        // this.newsAnalystAgent.mcpServers.push(massiveMCPServer);
         this.writerAgent.mcpServers.push(massiveMCPServer);
         this.masterAgent.mcpServers.push(massiveMCPServer);
-        // this.plannerAgent.handoffs.push(financialAnalystAgent , newsAnalystAgent , writerAgent);
-        // this.financialAnalystAgent.handoffs.push(this.plannerAgent);
-        // this.writerAgent.handoffs.push(this.plannerAgent);
-        // this.newsAnalystAgent.handoffs.push(this.plannerAgent);
+        this.writerAgent.tools.push(getSMA , getRSI, getEMA , getMACD)
+        this.masterAgent.tools.push(getSMA , getRSI, getEMA , getMACD)
     }
 
     private getMassiveMCPServer(){
@@ -111,7 +108,18 @@ export class AgentGroup implements IAgentGroup {
                     'get_ticker_details',
                     'list_dividends',
                     'list_splits',
-                    'list_ticker_news'
+                    'list_ticker_news',
+                    'list_tickers',
+                    'list_aggs',
+                    'get_grouped_daily_aggs',
+                    'get_daily_open_close_agg',
+                    'get_snapshot_all',
+                    'list_ipos',
+                    'list_short_interest',
+                    'list_short_volume',
+                    'get_ticker_types',
+                    'get_snapshot_direction',
+                    'list_universal_snapshots'
                 ],
             }),
             env: {
