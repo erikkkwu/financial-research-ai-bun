@@ -6,6 +6,7 @@ import {FinancialReportData, type FinancialReportDataType,  writerAgent } from "
 import {financialAnalystAgent} from "./financialAnalyst.js";
 import {MarkdownReport, masterAgent , type MarkdownReportType} from "./master.js";
 import {getEMA, getMACD, getRSI, getSMA} from "../tools/massive.js";
+import {webSearchTool} from "../tools/search.js";
 
 export interface IAgentGroup {
     run(query: string , context: AppContext): Promise<FinancialReportDataType>;
@@ -86,8 +87,8 @@ export class AgentGroup implements IAgentGroup {
         const massiveMCPServer = this.getMassiveMCPServer();
         this.writerAgent.mcpServers.push(massiveMCPServer);
         this.masterAgent.mcpServers.push(massiveMCPServer);
-        this.writerAgent.tools.push(getSMA , getRSI, getEMA , getMACD)
-        this.masterAgent.tools.push(getSMA , getRSI, getEMA , getMACD)
+        this.writerAgent.tools.push(getSMA , getRSI, getEMA , getMACD, webSearchTool)
+        this.masterAgent.tools.push(getSMA , getRSI, getEMA , getMACD, webSearchTool)
     }
 
     private getMassiveMCPServer(){
