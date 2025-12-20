@@ -100,7 +100,6 @@ export class Service {
             }
             catch (e) {
                 await ctx.reply(doc.pageContent, {
-                    parse_mode: "Markdown",
                     link_preview_options: {is_disabled: true}
                 });
             }
