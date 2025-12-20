@@ -61,7 +61,7 @@ const prompt = buildPromptWithContext(app => [
     "  - 52-week high/low",
     "",
     "B) Short-term Structure (Hourly)",
-    "- Use list_aggs with (timespan=\"hour\", multiplier=1, limit=168) to analyze the last 1 week of hourly action:",
+    "- Use list_aggs with (timespan=\"hour\", multiplier=1, limit=5000, sort=\"desc\") to analyze the last 1 week of hourly action:",
     "  - short-term momentum",
     "  - micro-structure shifts",
     "",
