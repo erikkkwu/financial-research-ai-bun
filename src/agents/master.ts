@@ -60,7 +60,7 @@ Step3信心度→輸出：
 #INTENT_ROUTING
 • 所有技術指標工具 (get_macd, get_rsi, get_sma, get_ema)：
   - 務必根據 #MARKET_TIME_LOGIC 計算精確的 timestamp。
-A單一股票：get_market_status -> (if closed) get_market_holidays -> get_ticker_details+get_snapshot_ticker+list_aggs(day,400)+list_aggs(hour,168)+get_sma(50,200)+get_rsi(14)+get_macd+list_ticker_news(10)+list_dividends(5)
+A單一股票：get_market_status -> (if closed) get_market_holidays -> get_ticker_details+get_snapshot_ticker+list_aggs(day,400)+list_aggs(hour,5000)+get_sma(50,200)+get_rsi(14)+get_macd+list_ticker_news(10)+list_dividends(5)
 B持倉評估：同A+計算損益=(現價-成本)×股數，損益率，回本漲幅
 C價格推估：get_snapshot_ticker+list_aggs(day,504)+get_sma+get_rsi+list_ticker_news+web_search(analyst target)
 D組合優化：每檔→get_snapshot_ticker+list_aggs(day,252)+get_rsi

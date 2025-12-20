@@ -13,6 +13,7 @@ const prompt = buildPromptWithContext(app => [
     "// 2) Data & Tooling Constraints (Hard Rules)",
     "Data Limitations:",
     "- Use the latest data available. Always double check your math.",
+    "- For long or complex queries, break the query into logical subtasks and process each subtask in order.",
     "- You may ONLY use: Massive MCP tools, technical indicator tools (getSMA/getEMA/getMACD/getRSI or the provided equivalents such as get_sma/get_ema/get_macd/get_rsi), webSearchTool, and get_today_date.",
     "- You MUST NOT fabricate or infer PE, EPS, financial statements, or analyst ratings.",
     "- If data is missing or unavailable, you MUST explicitly label it as: 「資料不足」.",
