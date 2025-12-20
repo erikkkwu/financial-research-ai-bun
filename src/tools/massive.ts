@@ -6,7 +6,8 @@ import {
     defaultApiGetOptionsMacdRequestSchema,
     defaultApiGetOptionsRsiRequestSchema,
     defaultApiGetOptionsSmaRequestSchema,
-    defaultApiGetStocksV1ShortInterestRequestSchema, defaultApiGetStocksV1ShortVolumeRequestSchema,
+    defaultApiGetStocksV1ShortInterestRequestSchema,
+    defaultApiGetStocksV1ShortVolumeRequestSchema,
     OrderTypeEnum,
     ShortInterestSortFields, ShortVolumeSortFields,
 } from "./interfaces/massive-zod.js";
@@ -14,8 +15,8 @@ import {
 import {json2csv} from 'json-2-csv'
 
 type DefaultApiGetOptionsSmaRequestSchema = z.infer<typeof defaultApiGetOptionsSmaRequestSchema>;
-const getClient = () => restClient(process.env.MASSIVE_API_KEY!,"https://api.massive.com", {
-    pagination: true
+const getClient = (pagination = true) => restClient(process.env.MASSIVE_API_KEY!,"https://api.massive.com", {
+    pagination: pagination
 });
 export const getSMA = tool({
     name: 'get_sma',
@@ -102,8 +103,7 @@ export const queryShortInterest = tool({
                 ...input,
                 sort: `${sortBy}.${order}`
             };
-            console.log('queryShortInterest', parameters)
-            const response = await getClient().getStocksV1ShortInterest(parameters);
+            const response = await getClient(false).getStocksV1ShortInterest(parameters);
 
             return json2csv(response.results);
         }
@@ -129,8 +129,7 @@ export const queryShortVolume = tool({
                 ...input,
                 sort: `${sortBy}.${order}`
             };
-            console.log('queryShortVolume', requestParameters)
-            const response = await getClient().getStocksV1ShortVolume(requestParameters);
+            const response = await getClient(false).getStocksV1ShortVolume(requestParameters);
 
             return json2csv(response.results);
         }
