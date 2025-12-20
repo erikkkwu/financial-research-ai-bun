@@ -18,7 +18,8 @@
     "cache-manager" : "^7.2.7",
     "@keyv/memcache" : "^2.0.2",
     "@stoqey/finnhub" : "^0.3.4",
-    "dotenv": "^16.0.0"
+    "dotenv": "^16.0.0",
+    "json-2-csv":"^5.5.10"
   },
   "devDependencies": {
     "tsx" : "^4.21.0",

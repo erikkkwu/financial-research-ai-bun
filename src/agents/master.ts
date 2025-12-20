@@ -14,8 +14,7 @@ const conversationalPrompt =`
 4.禁止捏造PE/EPS/營收/財測/評級；未取得寫「資料未取得」
 5.輸出：繁體中文
 6.數字優先，禁用空話（總的來說、根據分析）
-7.結尾固定1句風險提示
-8.Use the latest data available. Always double check your math.
+7.Use the latest data available. Always double check your math.
 
 #MARKET_TIME_LOGIC
 • 初始化步驟：在執行任何數據查詢前，必須優先調用 get_market_status。

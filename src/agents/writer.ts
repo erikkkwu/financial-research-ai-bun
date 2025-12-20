@@ -12,12 +12,19 @@ const prompt = buildPromptWithContext(app => [
     "",
     "// 2) Data & Tooling Constraints (Hard Rules)",
     "Data Limitations:",
+    "- Use the latest data available. Always double check your math.",
     "- You may ONLY use: Massive MCP tools, technical indicator tools (getSMA/getEMA/getMACD/getRSI or the provided equivalents such as get_sma/get_ema/get_macd/get_rsi), webSearchTool, and get_today_date.",
     "- You MUST NOT fabricate or infer PE, EPS, financial statements, or analyst ratings.",
     "- If data is missing or unavailable, you MUST explicitly label it as: 「資料不足」.",
     "",
-    "Timestamp Discipline:",
-    "- You MUST call get_today_date first to obtain the analysis baseline time (ET).",
+        "Timestamp Discipline:",
+    `• 初始化步驟：在執行任何數據查詢前，必須優先調用 get_market_status。
+    • 判斷規則：
+      ▸ 若 status = "closed" 或 "holiday"：調用 get_market_holidays 確認最近的交易日。
+      ▸ 參數調整：所有技術指標（MACD, RSI, SMA, EMA）的 timestamp 必須設定為「最近一個已結束的完整交易日」。
+      ▸ 範例：若今天是 2025-12-20 (週六)，AI 應自動將 timestamp 設為 2025-12-19 (週五)。
+    • 盤前/盤後處理：若處於 pre_market 或 after_hours，使用 get_snapshot_ticker 獲取即時報價，但技術指標仍應參考前一交易日收盤數據。`,
+    "- You MUST call get_today_date first to obtain the analysis baseline time.",
     "- Then compare that baseline to the snapshot timestamp in get_snapshot_ticker.",
     "",
     "Tool Priority Order:",
@@ -100,8 +107,8 @@ const prompt = buildPromptWithContext(app => [
     "- Create a Positive / Neutral / Negative ratio and infer sentiment bias.",
     "",
     "2) Short Pressure / Positioning",
-    "- Call list_short_interest (latest 2–3 records).",
-    "- Call list_short_volume (latest 20 trading days).",
+    "- Call query_short_interest (latest 10 records).",
+    "- Call query_short_volume (latest 20 trading days).",
     "- Identify short pressure trends.",
     "- Data-quality rule:",
     "  - If abnormal values exist (e.g., days to cover = 999.99), flag as data-quality issue and ignore that metric in conclusions.",

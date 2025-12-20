@@ -3364,64 +3364,142 @@ export const defaultApiGetStocksV1ExchangesRequestSchema = z.object({
     limit: z.number().optional()
 });
 
+export enum ShortInterestSortFields {
+    AvgDailyVolume ='avg_daily_volume',
+    DaysToCover ='days_to_cover',
+    SettlementDate = 'settlement_date',
+    ShortInterest = 'short_interest',
+}
+
+export enum OrderTypeEnum {
+    Asc ='asc',
+    Desc ='desc',
+}
 export const defaultApiGetStocksV1ShortInterestRequestSchema = z.object({
-    ticker: z.string().optional(),
-    tickerAnyOf: z.string().optional(),
-    tickerGt: z.string().optional(),
-    tickerGte: z.string().optional(),
-    tickerLt: z.string().optional(),
-    tickerLte: z.string().optional(),
-    daysToCover: z.number().optional(),
-    daysToCoverAnyOf: z.string().optional(),
-    daysToCoverGt: z.number().optional(),
-    daysToCoverGte: z.number().optional(),
-    daysToCoverLt: z.number().optional(),
-    daysToCoverLte: z.number().optional(),
-    settlementDate: z.string().optional(),
-    settlementDateAnyOf: z.string().optional(),
-    settlementDateGt: z.string().optional(),
-    settlementDateGte: z.string().optional(),
-    settlementDateLt: z.string().optional(),
-    settlementDateLte: z.string().optional(),
-    avgDailyVolume: z.number().optional(),
-    avgDailyVolumeAnyOf: z.string().optional(),
-    avgDailyVolumeGt: z.number().optional(),
-    avgDailyVolumeGte: z.number().optional(),
-    avgDailyVolumeLt: z.number().optional(),
-    avgDailyVolumeLte: z.number().optional(),
-    limit: z.number().optional(),
-    sort: z.string().optional()
+    ticker: z.string().nullish().describe("The primary ticker symbol for the stock."),
+    tickerAnyOf: z.string().nullish().describe("Filter equal to any of the values. Multiple values can be specified by using a comma separated list."),
+    tickerGt: z.string().nullish().describe("Filter greater than the value."),
+    tickerGte: z.string().nullish().describe("Filter greater than or equal to the value."),
+    tickerLt: z.string().nullish().describe("Filter less than the value."),
+    tickerLte: z.string().nullish().describe("Filter less than or equal to the value."),
+    daysToCover: z.number().nullish().describe("Calculated as short_interest divided by avg_daily_volume, representing the estimated number of days it would take to cover all short positions based on average trading volume. Value must be a floating point number."),
+    daysToCoverAnyOf: z.string().nullish().describe("Filter equal to any of the values. Multiple values can be specified by using a comma separated list. Value must be a floating point number."),
+    daysToCoverGt: z.number().nullish().describe("Filter greater than the value. Value must be a floating point number."),
+    daysToCoverGte: z.number().nullish().describe("Filter greater than or equal to the value. Value must be a floating point number."),
+    daysToCoverLt: z.number().nullish().describe("Filter less than the value. Value must be a floating point number."),
+    daysToCoverLte: z.number().nullish().describe("Filter less than or equal to the value. Value must be a floating point number."),
+    settlementDate: z.string().nullish().describe("The date (formatted as YYYY-MM-DD) on which the short interest data is considered settled, typically based on exchange reporting schedules."),
+    settlementDateAnyOf: z.string().nullish().describe("Filter equal to any of the values. Multiple values can be specified by using a comma separated list."),
+    settlementDateGt: z.string().nullish().describe("Filter greater than the value."),
+    settlementDateGte: z.string().nullish().describe("Filter greater than or equal to the value."),
+    settlementDateLt: z.string().nullish().describe("Filter less than the value."),
+    settlementDateLte: z.string().nullish().describe("Filter less than or equal to the value."),
+    avgDailyVolume: z.number().nullish().describe("The average daily trading volume for the stock over a specified period, typically used to contextualize short interest. Value must be an integer."),
+    avgDailyVolumeAnyOf: z.string().nullish().describe("Filter equal to any of the values. Multiple values can be specified by using a comma separated list. Value must be an integer."),
+    avgDailyVolumeGt: z.number().nullish().describe("Filter greater than the value. Value must be an integer."),
+    avgDailyVolumeGte: z.number().nullish().describe("Filter greater than or equal to the value. Value must be an integer."),
+    avgDailyVolumeLt: z.number().nullish().describe("Filter less than the value. Value must be an integer."),
+    avgDailyVolumeLte: z.number().nullish().describe("Filter less than or equal to the value. Value must be an integer."),
+    limit: z.number().int().max(50000).nullish().default(10).describe("Limit the maximum number of results returned. Defaults to '10' if not specified. The maximum allowed limit is '50000'."),
+    sortBy: z.enum(ShortInterestSortFields).nullish().default(ShortInterestSortFields.SettlementDate).describe("Sort the results by a specific field. Defaults to 'settlement_date'."),
+    order: z.enum(OrderTypeEnum).nullish().default(OrderTypeEnum.Desc)
 });
 
+export enum ShortVolumeSortFields {
+    AdfShortVolume = "adf_short_volume",
+    AdfShortVolumeExempt = "adf_short_volume_exempt",
+    Date = "date",
+    ExemptVolume = "exempt_volume",
+    NasdaqCarteretShortVolume = "nasdaq_carteret_short_volume",
+    NasdaqCarteretShortVolumeExempt = "nasdaq_carteret_short_volume_exempt",
+    NasdaqChicagoShortVolume = "nasdaq_chicago_short_volume",
+    NasdaqChicagoShortVolumeExempt = "nasdaq_chicago_short_volume_exempt",
+    NonExemptVolume = "non_exempt_volume",
+    NyseShortVolume = "nyse_short_volume",
+    NyseShortVolumeExempt = "nyse_short_volume_exempt",
+    ShortVolume = "short_volume",
+    ShortVolumeRatio = "short_volume_ratio",
+    TotalVolume = "total_volume"
+}
 export const defaultApiGetStocksV1ShortVolumeRequestSchema = z.object({
-    ticker: z.string().optional(),
-    tickerAnyOf: z.string().optional(),
-    tickerGt: z.string().optional(),
-    tickerGte: z.string().optional(),
-    tickerLt: z.string().optional(),
-    tickerLte: z.string().optional(),
-    date: z.string().optional(),
-    dateAnyOf: z.string().optional(),
-    dateGt: z.string().optional(),
-    dateGte: z.string().optional(),
-    dateLt: z.string().optional(),
-    dateLte: z.string().optional(),
-    shortVolumeRatio: z.number().optional(),
-    shortVolumeRatioAnyOf: z.string().optional(),
-    shortVolumeRatioGt: z.number().optional(),
-    shortVolumeRatioGte: z.number().optional(),
-    shortVolumeRatioLt: z.number().optional(),
-    shortVolumeRatioLte: z.number().optional(),
-    totalVolume: z.number().optional(),
-    totalVolumeAnyOf: z.string().optional(),
-    totalVolumeGt: z.number().optional(),
-    totalVolumeGte: z.number().optional(),
-    totalVolumeLt: z.number().optional(),
-    totalVolumeLte: z.number().optional(),
-    limit: z.number().optional(),
-    sort: z.string().optional()
-});
+    ticker: z.string().nullish()
+        .describe("The primary ticker symbol for the stock."),
 
+    tickerAnyOf: z.string().nullish()
+        .describe("Filter equal to any of the values. Multiple values can be specified by using a comma separated list."),
+
+    tickerGt: z.string().nullish()
+        .describe("Filter greater than the value."),
+
+    tickerGte: z.string().nullish()
+        .describe("Filter greater than or equal to the value."),
+
+    tickerLt: z.string().nullish()
+        .describe("Filter less than the value."),
+
+    tickerLte: z.string().nullish()
+        .describe("Filter less than or equal to the value."),
+
+    date: z.string().nullish()
+        .describe("The date of trade activity reported in the format YYYY-MM-DD"),
+
+    dateAnyOf: z.string().nullish()
+        .describe("Filter equal to any of the values. Multiple values can be specified by using a comma separated list."),
+
+    dateGt: z.string().nullish()
+        .describe("Filter greater than the value."),
+
+    dateGte: z.string().nullish()
+        .describe("Filter greater than or equal to the value."),
+
+    dateLt: z.string().nullish()
+        .describe("Filter less than the value."),
+
+    dateLte: z.string().nullish()
+        .describe("Filter less than or equal to the value."),
+
+    shortVolumeRatio: z.number().nullish()
+        .describe("The percentage of total volume that was sold short. Calculated as (short_volume / total_volume) * 100. Value must be a floating point number."),
+
+    shortVolumeRatioAnyOf: z.string().nullish()
+        .describe("Filter equal to any of the values. Multiple values can be specified by using a comma separated list. Value must be a floating point number."),
+
+    shortVolumeRatioGt: z.number().nullish()
+        .describe("Filter greater than the value. Value must be a floating point number."),
+
+    shortVolumeRatioGte: z.number().nullish()
+        .describe("Filter greater than or equal to the value. Value must be a floating point number."),
+
+    shortVolumeRatioLt: z.number().nullish()
+        .describe("Filter less than the value. Value must be a floating point number."),
+
+    shortVolumeRatioLte: z.number().nullish()
+        .describe("Filter less than or equal to the value. Value must be a floating point number."),
+
+    totalVolume: z.number().nullish()
+        .describe("Total reported volume across all venues for the ticker on the given date. Value must be an integer."),
+
+    totalVolumeAnyOf: z.string().nullish()
+        .describe("Filter equal to any of the values. Multiple values can be specified by using a comma separated list. Value must be an integer."),
+
+    totalVolumeGt: z.number().nullish()
+        .describe("Filter greater than the value. Value must be an integer."),
+
+    totalVolumeGte: z.number().nullish()
+        .describe("Filter greater than or equal to the value. Value must be an integer."),
+
+    totalVolumeLt: z.number().nullish()
+        .describe("Filter less than the value. Value must be an integer."),
+
+    totalVolumeLte: z.number().nullish()
+        .describe("Filter less than or equal to the value. Value must be an integer."),
+
+    limit: z.number().nullish()
+        .describe("Limit the maximum number of results returned. Defaults to '10' if not specified. The maximum allowed limit is '50000'."),
+
+    sortBy: z.enum(ShortVolumeSortFields).nullish().default(ShortVolumeSortFields.Date).describe("Sort the results by a specific field. Defaults to 'date'."),
+    order: z.enum(OrderTypeEnum).nullish().default(OrderTypeEnum.Desc)
+});
 export const getStocksV1SplitsAdjustmentTypeEnumSchema = z.enum(GetStocksV1SplitsAdjustmentTypeEnum);
 
 export const getStocksV1SplitsAdjustmentTypeAnyOfEnumSchema = z.enum(GetStocksV1SplitsAdjustmentTypeAnyOfEnum);

@@ -1,7 +1,17 @@
 import {restClient} from '@massive.com/client-js';
 import {tool, ToolExecuteArgument} from "@openai/agents";
 import {z} from "zod";
-import {defaultApiGetOptionsEmaRequestSchema, defaultApiGetOptionsSmaRequestSchema , defaultApiGetOptionsMacdRequestSchema ,defaultApiGetOptionsRsiRequestSchema } from "./interfaces/massive-zod.js";
+import {
+    defaultApiGetOptionsEmaRequestSchema,
+    defaultApiGetOptionsMacdRequestSchema,
+    defaultApiGetOptionsRsiRequestSchema,
+    defaultApiGetOptionsSmaRequestSchema,
+    defaultApiGetStocksV1ShortInterestRequestSchema, defaultApiGetStocksV1ShortVolumeRequestSchema,
+    OrderTypeEnum,
+    ShortInterestSortFields, ShortVolumeSortFields,
+} from "./interfaces/massive-zod.js";
+
+import {json2csv} from 'json-2-csv'
 
 type DefaultApiGetOptionsSmaRequestSchema = z.infer<typeof defaultApiGetOptionsSmaRequestSchema>;
 const getClient = () => restClient(process.env.MASSIVE_API_KEY!,"https://api.massive.com", {
@@ -14,6 +24,7 @@ export const getSMA = tool({
     execute: async (input: ToolExecuteArgument<DefaultApiGetOptionsSmaRequestSchema>) => {
         try {
             const response = await getClient().getOptionsSMA(input);
+            response.results.underlying?.url && delete response.results.underlying?.url
             return response.results;
         } catch (e) {
             return e instanceof Error ? e.message : "Unknown error occurred";
@@ -29,6 +40,8 @@ export const getEMA = tool({
     execute: async (input: ToolExecuteArgument<DefaultApiGetOptionsEmaRequestSchema>) => {
         try {
             const response = await getClient().getOptionsEMA(input);
+            response.results.underlying?.url && delete response.results.underlying?.url
+
             return response.results;
         }
         catch (e) {
@@ -46,6 +59,7 @@ export const getMACD = tool({
     execute: async (input: ToolExecuteArgument<DefaultApiGetOptionsMacdRequestSchema>)=>{
         try {
             const response = await getClient().getOptionsMACD(input);
+            response.results.underlying?.url && delete response.results.underlying?.url
             return response.results;
         }
         catch (e) {
@@ -62,7 +76,63 @@ export const getRSI = tool({
     execute: async (input: ToolExecuteArgument<DefaultApiGetOptionsRsiRequestSchema>)=>{
         try {
             const response = await getClient().getOptionsRSI(input);
+            if(response.results.underlying?.url){
+                delete response.results.underlying?.url
+            }
             return response.results;
+        }
+        catch (e) {
+            return e instanceof Error ? e.message : "Unknown error occurred";
+        }
+    }
+})
+
+type DefaultApiGetStocksV1ShortInterestRequestSchema = z.infer<typeof defaultApiGetStocksV1ShortInterestRequestSchema>;
+export const queryShortInterest = tool({
+    name: 'query_short_interest',
+    description: 'Retrieve the short interest for a specified ticker over a defined time range.',
+    parameters: defaultApiGetStocksV1ShortInterestRequestSchema,
+    execute: async (input: ToolExecuteArgument<DefaultApiGetStocksV1ShortInterestRequestSchema>)=>{
+        try {
+            const sortBy = input.sortBy ?? ShortInterestSortFields.SettlementDate;
+            const order = input.order ?? OrderTypeEnum.Desc;
+            delete input.order
+            delete input.sortBy
+            const parameters = {
+                ...input,
+                sort: `${sortBy}.${order}`
+            };
+            console.log('queryShortInterest', parameters)
+            const response = await getClient().getStocksV1ShortInterest(parameters);
+
+            return json2csv(response.results);
+        }
+        catch (e) {
+            return e instanceof Error ? e.message : "Unknown error occurred";
+        }
+    }
+})
+
+type DefaultApiGetStocksV1ShortVolumeRequestSchema = z.infer<typeof defaultApiGetStocksV1ShortVolumeRequestSchema>;
+export const queryShortVolume = tool({
+    name: 'query_short_volume',
+    description: 'Retrieve the short interest for a specified ticker over a defined time range.',
+    parameters: defaultApiGetStocksV1ShortVolumeRequestSchema,
+    execute: async (input: ToolExecuteArgument<DefaultApiGetStocksV1ShortVolumeRequestSchema>)=>{
+        try {
+            const sortBy = input.sortBy ?? ShortVolumeSortFields.Date;
+            const order = input.order ?? OrderTypeEnum.Desc;
+            delete input.order
+            delete input.sortBy
+
+            const requestParameters = {
+                ...input,
+                sort: `${sortBy}.${order}`
+            };
+            console.log('queryShortVolume', requestParameters)
+            const response = await getClient().getStocksV1ShortVolume(requestParameters);
+
+            return json2csv(response.results);
         }
         catch (e) {
             return e instanceof Error ? e.message : "Unknown error occurred";

@@ -29,6 +29,9 @@ importers:
       dotenv:
         specifier: ^16.0.0
         version: 16.6.1
+      json-2-csv:
+        specifier: ^5.5.10
+        version: 5.5.10
       telegraf:
         specifier: 4.16.3
         version: 4.16.3
@@ -616,6 +619,10 @@ packages:
     resolution: {integrity: sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==}
     engines: {node: '>=0.10'}
 
+  deeks@3.1.0:
+    resolution: {integrity: sha512-e7oWH1LzIdv/prMQ7pmlDlaVoL64glqzvNgkgQNgyec9ORPHrT2jaOqMtRyqJuwWjtfb6v+2rk9pmaHj+F137A==}
+    engines: {node: '>= 16'}
+
   deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
 
@@ -626,6 +633,10 @@ packages:
   depd@2.0.0:
     resolution: {integrity: sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==}
     engines: {node: '>= 0.8'}
+
+  doc-path@4.1.1:
+    resolution: {integrity: sha512-h1ErTglQAVv2gCnOpD3sFS6uolDbOKHDU1BZq+Kl3npPqroU3dYL42lUgMfd5UimlwtRgp7C9dLGwqQ5D2HYgQ==}
+    engines: {node: '>=16'}
 
   doctrine@3.0.0:
     resolution: {integrity: sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w==}
@@ -1079,6 +1090,10 @@ packages:
   js-yaml@3.14.2:
     resolution: {integrity: sha512-PMSmkqxr106Xa156c2M265Z+FTrPl+oxd/rgOQy2tijQeK5TxQ43psO1ZCwhVOSdnn+RzkzlRz/eY4BgJBYVpg==}
     hasBin: true
+
+  json-2-csv@5.5.10:
+    resolution: {integrity: sha512-Dep8wO3Fr5wNjQevO2Z8Y7yeee/nYSGRsi7q6zJDKEVHxXkXT+v21vxHmDX923UzmCXXkSo62HaTz6eTWzFLaw==}
+    engines: {node: '>= 16'}
 
   json-buffer@3.0.1:
     resolution: {integrity: sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==}
@@ -2501,12 +2516,16 @@ snapshots:
 
   decode-uri-component@0.2.2: {}
 
+  deeks@3.1.0: {}
+
   deep-is@0.1.4: {}
 
   delayed-stream@1.0.0: {}
 
   depd@2.0.0:
     optional: true
+
+  doc-path@4.1.1: {}
 
   doctrine@3.0.0:
     dependencies:
@@ -3022,6 +3041,11 @@ snapshots:
     dependencies:
       argparse: 1.0.10
       esprima: 4.0.1
+
+  json-2-csv@5.5.10:
+    dependencies:
+      deeks: 3.1.0
+      doc-path: 4.1.1
 
   json-buffer@3.0.1: {}
 

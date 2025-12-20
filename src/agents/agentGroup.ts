@@ -5,7 +5,7 @@ import {newsAnalystAgent} from "./newsAnalyst.js";
 import {FinancialReportData, type FinancialReportDataType,  writerAgent } from "./writer.js";
 import {financialAnalystAgent} from "./financialAnalyst.js";
 import {MarkdownReport, masterAgent , type MarkdownReportType} from "./master.js";
-import {getEMA, getMACD, getRSI, getSMA} from "../tools/massive.js";
+import {getEMA, getMACD, getRSI, getSMA, queryShortInterest, queryShortVolume} from "../tools/massive.js";
 import {webSearchTool} from "../tools/search.js";
 
 export interface IAgentGroup {
@@ -87,8 +87,8 @@ export class AgentGroup implements IAgentGroup {
         const massiveMCPServer = this.getMassiveMCPServer();
         this.writerAgent.mcpServers.push(massiveMCPServer);
         this.masterAgent.mcpServers.push(massiveMCPServer);
-        this.writerAgent.tools.push(getSMA , getRSI, getEMA , getMACD, webSearchTool)
-        this.masterAgent.tools.push(getSMA , getRSI, getEMA , getMACD, webSearchTool)
+        this.writerAgent.tools.push(getSMA , getRSI, getEMA , getMACD,  queryShortInterest , queryShortVolume, webSearchTool)
+        this.masterAgent.tools.push(getSMA , getRSI, getEMA , getMACD,queryShortInterest , queryShortVolume, webSearchTool)
     }
 
     private getMassiveMCPServer(){
@@ -116,8 +116,8 @@ export class AgentGroup implements IAgentGroup {
                     'get_daily_open_close_agg',
                     'get_snapshot_all',
                     'list_ipos',
-                    'list_short_interest',
-                    'list_short_volume',
+                    // 'list_short_interest',
+                    // 'list_short_volume',
                     'get_ticker_types',
                     'get_snapshot_direction',
                     'list_universal_snapshots'
