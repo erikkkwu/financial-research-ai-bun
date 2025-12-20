@@ -1,4 +1,4 @@
-import {type Agent, MCPServerStdio, run , createMCPToolStaticFilter } from "@openai/agents";
+import {type Agent, MCPServerStdio, run , createMCPToolStaticFilter , MemorySession , getLogger } from "@openai/agents";
 import type {AppContext} from "./context.ts";
 import {plannerAgent} from "./plannerAgent.js";
 import {newsAnalystAgent} from "./newsAnalyst.js";
@@ -10,21 +10,36 @@ import {webSearchTool} from "../tools/search.js";
 
 export interface IAgentGroup {
     run(query: string , context: AppContext): Promise<FinancialReportDataType>;
-    runMaster(query: string): Promise<MarkdownReportType>;
+    runMaster(query: string , chatID: number): Promise<MarkdownReportType>;
+    endMasterSession(chatID: number): void;
 }
 
 export class AgentGroup implements IAgentGroup {
+    private sessionMap = new Map<number, MemorySession>();
     constructor(private plannerAgent: Agent<any,any> , private financialAnalystAgent: Agent<AppContext> , private newsAnalystAgent: Agent<AppContext>, private writerAgent: Agent<AppContext, typeof FinancialReportData> , private masterAgent: Agent<AppContext , typeof MarkdownReport> ) {
         this.setupAgentSettings()
     }
 
-    async runMaster(query: string): Promise<MarkdownReportType> {
+    endMasterSession(chatID: number): void {
+        this.sessionMap.delete(chatID);
+    }
+
+    async runMaster(query: string , chatID: number): Promise<MarkdownReportType> {
+        if (!this.sessionMap.has(chatID)) {
+            this.sessionMap.set(chatID , new MemorySession({
+                logger: getLogger('memory:memory'),
+            }));
+        }
+
+        const session = this.sessionMap.get(chatID)!;
         await this.connectMCPServers();
 
         console.log('connected to MCP servers.')
         try {
 
-            const result = await run(this.masterAgent, query);
+            const result = await run(this.masterAgent, query , {
+                session: session,
+            });
             console.log('got report')
             const parsed = MarkdownReport.safeParse(result.finalOutput);
 

@@ -22,6 +22,13 @@ export class Service {
                     "- `/analyse BRK.B`",
                 ].join("\n"))
             })
+            telegraf.command(["end"], async (ctx) => {
+                if (!chatIDWhitelist.includes(ctx.chat?.id)) return ctx.reply("This bot is not available in this chat.")
+                await ctx.reply(`ending session...`)
+                this.agentGroup.endMasterSession(ctx.chat.id)
+                await ctx.reply(`終於把妳幹了`)
+            })
+
             telegraf.command(["b"], async (ctx) => {
                 if (!chatIDWhitelist.includes(ctx.chat?.id)) return ctx.reply("This bot is not available in this chat.")
                 if (!ctx.text) return ctx.reply(
@@ -33,7 +40,7 @@ export class Service {
                 console.log(prompt)
                 await ctx.reply(`Generating report...(閉嘴乖乖等)`)
                 try {
-                    const report = await this.agentGroup.runMaster(prompt);
+                    const report = await this.agentGroup.runMaster(prompt, ctx.chat.id );
                     await this.sendMarkdownReport(ctx,report.markdown_report)
                 }
                 catch (e) {
