@@ -135,8 +135,19 @@ const prompt = buildPromptWithContext(app => [
     "- In Part 4 (Strategy), include this stop-loss guideline verbatim in Traditional Chinese:",
     "  「停損點應設於關鍵支撐下方 0.5%–1%，以避免市場雜訊掃出場」。",
     "",
+    `#OUTPUT_FORMAT
+    輸出平台為Telegram，格式限制如下：
+    - 禁止使用Markdown表格（|---|語法）
+    - 禁止使用###三級標題
+    - 可用格式：*粗體* _斜體_ \`代碼\`
+    - 標題用全形符號：【標題】或 ▎標題
+    - 分隔用：━━━ 或 ───
+    - 列表用：• 或 ▸ 或數字
+    - 數據排版用對齊的純文字，每項一行
+    - emoji可正常使用
+    - 保持簡潔，避免過長段落`,
     "",
-    "// 4) Final Report Format (Markdown) — MUST output in Traditional Chinese",
+    "// 4) Final Report Format (follow #OUTPUT_FORMAT) — MUST output in Traditional Chinese",
     "- All section titles and labels MUST be in Traditional Chinese.",
     "- Use professional wording; do not invent new jargon.",
     "",

@@ -1,111 +1,97 @@
----
-description: Use Bun instead of Node.js, npm, pnpm, or vite.
-globs: "*.ts, *.tsx, *.html, *.css, *.js, *.jsx, package.json"
-alwaysApply: false
----
-
-Default to using Bun instead of Node.js.
-
-- Use `bun <file>` instead of `node <file>` or `ts-node <file>`
-- Use `bun test` instead of `jest` or `vitest`
-- Use `bun build <file.html|file.ts|file.css>` instead of `webpack` or `esbuild`
-- Use `bun install` instead of `npm install` or `yarn install` or `pnpm install`
-- Use `bun run <script>` instead of `npm run <script>` or `yarn run <script>` or `pnpm run <script>`
-- Bun automatically loads .env, so don't use dotenv.
-
-## APIs
-
-- `Bun.serve()` supports WebSockets, HTTPS, and routes. Don't use `express`.
-- `bun:sqlite` for SQLite. Don't use `better-sqlite3`.
-- `Bun.redis` for Redis. Don't use `ioredis`.
-- `Bun.sql` for Postgres. Don't use `pg` or `postgres.js`.
-- `WebSocket` is built-in. Don't use `ws`.
-- Prefer `Bun.file` over `node:fs`'s readFile/writeFile
-- Bun.$`ls` instead of execa.
-
-## Testing
-
-Use `bun test` to run tests.
-
-```ts#index.test.ts
-import { test, expect } from "bun:test";
-
-test("hello world", () => {
-  expect(1).toBe(1);
-});
-```
-
-## Frontend
-
-Use HTML imports with `Bun.serve()`. Don't use `vite`. HTML imports fully support React, CSS, Tailwind.
-
-Server:
-
-```ts#index.ts
-import index from "./index.html"
-
-Bun.serve({
-  routes: {
-    "/": index,
-    "/api/users/:id": {
-      GET: (req) => {
-        return new Response(JSON.stringify({ id: req.params.id }));
-      },
-    },
-  },
-  // optional websocket support
-  websocket: {
-    open: (ws) => {
-      ws.send("Hello, world!");
-    },
-    message: (ws, message) => {
-      ws.send(message);
-    },
-    close: (ws) => {
-      // handle close
+      text: '# TSLA（Tesla）短 / 中 / 長期投資分析報告（技術面 + 情緒面整合）\n' +
+        '\n' +
+        '## 第一部分:市場情緒與消息面儀表板\n' +
+        '\n' +
+        '- **參考時間與盤勢狀態**: 2025/12/20 03:58（ET）– **收盤**（美股 NYSE/Nasdaq 皆為 closed）\n' +
+        '- **即時盤勢**: **481.20**（日變動: **-0.15%**, -0.72）\n' +
+        '  - **開盤/前收差（Gap）**: 488.12 vs 483.37 = **+4.75（+0.98%）**\n' +
+        '  - **盤前/盤後**: 盤前 **487.67**；盤後 **482.65**（皆為資料來源提供之延伸時段報價）\n' +
+        '  - **量能狀態**: 2025/12/19 成交量 **103.16M**；近 20 日均量（以日K近 20 根估算）約 **78.21M** → **Vol_Ratio ≈ 1.32（偏放量）**\n' +
+        '- **公司概況**: Tesla, Inc. Common Stock（汽車製造/電動車與 AI 軟體）– **市值約 1.61 兆美元，屬大型股**\n' +
+        '- **情緒判讀**: **觀望偏悲觀**（短期監管利空與競爭壓力新聞偏多，但長線 Robotaxi/AI 敘事仍支撐多頭想像）\n' +
+        '- **空頭與籌碼**:\n' +
+        '  - **放空餘額（Short Interest）**: 工具回傳最新資料停在 **2025/11/28**（約 78.30M 股、days to cover 約 1）→ **資料新鮮度不足，僅能作趨勢參考**。\n' +
+        '  - **放空成交量（Short Volume）**: 近 20 個交易日多落在 **約 49%–64%** 區間；2025/12/19 約 **56.12%**，屬偏高但未見極端失真。\n' +
+        '- **重點新聞（近 2–3 則）**:\n' +
+        '  1) **加州監管/行銷用語（Autopilot）**相關消息導致股價波動、引發市場對自駕宣稱的監管風險擔憂。\n' +
+        '  2) **Robotaxi/AI 願景**相關評論與分析持續發酵，提供長線敘事支撐。\n' +
+        '  3) **中國/歐洲競爭與需求壓力**（本土品牌競爭、價格戰）反覆被提及，屬中期基本面不確定因子。\n' +
+        '\n' +
+        '## 第二部分:雙時框技術結構\n' +
+        '\n' +
+        '### 長線趨勢(日線)\n' +
+        '- **結論**: **多頭**（結構偏強）\n' +
+        '- **均線結構**（以 2025/12/19 為最近完整交易日）:\n' +
+        '  - **SMA20 ≈ 446.99**\n' +
+        '  - **SMA50 ≈ 439.71**\n' +
+        '  - **SMA200 ≈ 351.10**\n' +
+        '  - 收盤 **481.20** 明顯在 **SMA20/50/200 之上**，長線趨勢仍偏多。\n' +
+        '- **52 週高/低（以近 365 根日K估算）**:\n' +
+        '  - **52 週高點**: 約 **495.28**（2025/12/17 附近）\n' +
+        '  - **52 週低點**: 約 **222.15**（2025/03/10 附近）\n' +
+        '  - 目前位於 52 週高檔區，屬「高位震盪」而非低檔反轉。\n' +
+        '\n' +
+        '### 短線動能(小時線)\n' +
+        '- **資料狀態**: 小時線工具回傳筆數明顯不足（僅少量片段），因此**短線微結構（1 週小時級別）判讀：資料不足**。\n' +
+        '\n' +
+        '### 技術指標（以日線為主）\n' +
+        '- **RSI(14)**: **61.66** → 偏多但未到極端過熱（仍需留意高檔鈍化後的急跌風險）。\n' +
+        '- **MACD(12-26-9)**: \n' +
+        '  - MACD **13.66**、Signal **9.27**、Histogram **+4.40** → 多頭動能仍在，但屬高檔區，容易出現「動能降溫」造成回檔。\n' +
+        '- **EMA**:\n' +
+        '  - **EMA12 ≈ 463.67**、**EMA26 ≈ 450.01**\n' +
+        '  - 價格在 EMA12 之上，屬強勢；若後續跌破 EMA12，通常是短線轉弱的第一個警訊。\n' +
+        '\n' +
+        '### 關鍵價位（支撐/壓力）\n' +
+        '> 原則：以日線「至少兩次觸及」的擺動高低點/密集成交區推導，價格四捨五入至小數點後兩位。\n' +
+        '\n' +
+        '- **支撐**:\n' +
+        '  - **475.00–474.72**：近期多次回測區（12/17–12/19 連續出現低點/回踩），屬第一道防線。\n' +
+        '  - **466.20–467.26**：12/16–12/18 低點密集區，若跌破 475，這裡是下一個較關鍵的結構支撐。\n' +
+        '- **壓力**:\n' +
+        '  - **490.49–491.50**：近幾日高點反覆受壓（12/18–12/19 高點區）。\n' +
+        '  - **495.28**：近 52 週高點附近，屬「前高套牢/突破門檻」。\n' +
+        '\n' +
+        '### 量價分析（時間加權邏輯）\n' +
+        '- 因目前為 **2025/12/20（週六）收盤後**，無法做當日「開盤一小時/午盤/尾盤」的即時分段量能判讀；改以日量能做結論：\n' +
+        '  - 12/19 成交量 **103.16M** 相對近 20 日均量 **約 78.21M** 為 **放量**，但收盤收在日內區間偏中下（高 490.49、低 474.72、收 481.20），顯示 **高檔有獲利了結/供給增加**。\n' +
+        '\n' +
+        '## 第三部分:波動與風險評估\n' +
+        '\n' +
+        '### 波動特性（ADR%）\n' +
+        '- 以近 20 個交易日估算平均日振幅（High-Low）約 **15.69**，以 12/19 收盤 **481.20** 計：\n' +
+        '  - **ADR% ≈ 3.26%**\n' +
+        '- **波動評級**: **偏高波動**（適合波段/短線，但不利於無停損的追價長抱）。\n' +
+        '\n' +
+        '### 事件/籌碼風險\n' +
+        '- **監管風險**: 自駕/行銷用語（Autopilot 等）相關監管消息，容易造成「跳空」與情緒性賣壓。\n' +
+        '- **競爭與需求風險**: 中國/歐洲市場競爭與價格壓力的敘事反覆出現，可能壓抑中期風險偏好。\n' +
+        '- **空頭面**: 放空成交比長期偏高（約 50%+），代表市場分歧大；若利空擴大，容易放大下跌斜率；若利多突破前高，也可能形成軋空助漲。\n' +
+        '\n' +
+        '### 除權息/拆股影響\n' +
+        '- **股利**: 近 12 個月 **未查得股利資料（資料不足/或確實無配息）**。\n' +
+        '- **拆股**: 近 12 個月 **未查得拆股資料（資料不足/或確實無拆股）**。\n' +
+        '\n' +
+        '## 第四部分:實戰操作策略\n' +
+        '\n' +
+        '- **目前狀態判定**: **觀望（偏多操作，但不追高）**\n' +
+        '- **建議持倉週期**: **波段**（短線可做、長投需分批與嚴控回撤）\n' +
+        '\n' +
+        '> 「停損點應設於關鍵支撐下方 0.5%–1%，以避免市場雜訊掃出場」。\n' +
+        '\n' +
+        '### 情境分析(若…則…格式)\n' +
+        '\n' +
+        '- **情境 A(順勢操作)**:\n' +
+        '  - 若股價 **突破並站穩 491.50**（建議以日線收盤確認），且量能維持不縮，則視為挑戰前高的續攻訊號，目標先看 **495.28**，再看整數關卡 **500.00**。\n' +
+        '  - 若突破後 **快速跌回 491.50 下方**，屬高檔假突破風險，宜減碼或撤退。\n' +
+        '\n' +
+        '- **情境 B(防守低接)**:\n' +
+        '  - 若回測 **475.00–474.72** 守穩（出現日線下影線/量縮止跌），可採分批低接，反彈目標先看 **490.50**。\n' +
+        '  - 若跌破 **474.72**，下一道支撐看 **467.26–466.20**；低接策略需更保守，避免落入高檔轉弱的加速段。\n' +
+        '  - 停損依規則設於支撐下方 0.5%–1%。\n' +
+        '\n' +
+        '### 補充：短/中/長期投資觀點（整合）\n' +
+        '- **短期（數日～2 週）**: 高檔震盪偏回檔，交易重點在 **475 防線** 與 **491.5 壓力** 的突破/跌破。\n' +
+        '- **中期（1～3 個月）**: 只要價格維持在 **SMA20/50 上方**，仍屬多頭趨勢中的整理；但監管與競爭消息可能造成波段急殺，需用「價位」而非「敘事」控風險。\n' +
+        '- **長期（6～18 個月）**: 技術面長多（站上 SMA200 且均線多頭排列），但長線報酬更依賴 Robotaxi/AI 敘事能否轉化為可持續的營運成果；此部分屬基本面/財務驗證範疇，本報告依規定不推估 EPS/PE，故以 **資料不足** 標註財務面結論。'
     }
-  },
-  development: {
-    hmr: true,
-    console: true,
-  }
-})
-```
-
-HTML files can import .tsx, .jsx or .js files directly and Bun's bundler will transpile & bundle automatically. `<link>` tags can point to stylesheets and Bun's CSS bundler will bundle.
-
-```html#index.html
-<html>
-  <body>
-    <h1>Hello, world!</h1>
-    <script type="module" src="./frontend.tsx"></script>
-  </body>
-</html>
-```
-
-With the following `frontend.tsx`:
-
-```tsx#frontend.tsx
-import React from "react";
-
-// import .css files directly and it works
-import './index.css';
-
-import { createRoot } from "react-dom/client";
-
-const root = createRoot(document.body);
-
-export default function Frontend() {
-  return <h1>Hello, world!</h1>;
-}
-
-root.render(<Frontend />);
-```
-
-Then, run index.ts
-
-```sh
-bun --hot ./index.ts
-```
-
-For more information, read the Bun API docs in `node_modules/bun-types/docs/**.md`.
