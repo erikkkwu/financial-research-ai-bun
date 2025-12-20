@@ -268,7 +268,6 @@ export const masterAgent = new Agent<AppContext, typeof MarkdownReport>({
     name: 'MasterAgent',
     instructions: conversationalPrompt,
     model: 'gpt-5.2',
-    tools: [],
     modelSettings: {
         temperature: 0.12,       // 極低，確保計算一致性
         topP: 0.85,              // 收緊，減少冗餘輸出
