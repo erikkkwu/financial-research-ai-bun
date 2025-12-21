@@ -20,7 +20,7 @@ const getClient = (pagination = true) => restClient(process.env.MASSIVE_API_KEY!
 });
 export const getSMA = tool({
     name: 'get_sma',
-    description: "Retrieve the Simple Moving Average (SMA) for a specified ticker over a defined time range. The SMA calculates the average price across a set number of periods, smoothing price fluctuations to reveal underlying trends and potential signals. Use Cases: Trend analysis, trading signal generation (e.g., SMA crossovers), identifying support/resistance, and refining entry/exit timing.",
+    description: "Retrieve the Simple Moving Average (SMA) for a specified ticker. [IMPORTANT]: Use 'timestamp' for a single date (YYYY-MM-DD). For a date range, use 'timestampGte' and/or 'timestampLte'. NEVER mix 'timestamp' with range parameters (Gte, Gt, Lte, Lt) in the same request to avoid 400 errors. SMA helps in trend analysis and identifying support/resistance.",
     parameters: defaultApiGetOptionsSmaRequestSchema,
     execute: async (input: ToolExecuteArgument<DefaultApiGetOptionsSmaRequestSchema>) => {
         try {
@@ -36,26 +36,24 @@ export const getSMA = tool({
 type DefaultApiGetOptionsEmaRequestSchema = z.infer<typeof defaultApiGetOptionsEmaRequestSchema>;
 export const getEMA = tool({
     name: 'get_ema',
-    description: "Retrieve the Exponential Moving Average (EMA) for a specified ticker over a defined time range. The EMA places greater weight on recent prices, enabling quicker trend detection and more responsive signals. Use Cases: Trend identification, EMA crossover signals, dynamic support/resistance levels, and adjusting strategies based on recent market volatility.",
+    description: "Retrieve the Exponential Moving Average (EMA) for a specified ticker. [IMPORTANT]: Use 'timestamp' for a single date. For a date range, use 'timestampGte' and/or 'timestampLte'. NEVER mix 'timestamp' with range parameters (Gte, Gt, Lte, Lt) to avoid 400 errors. EMA is more responsive to recent price changes than SMA.",
     parameters: defaultApiGetOptionsEmaRequestSchema,
     execute: async (input: ToolExecuteArgument<DefaultApiGetOptionsEmaRequestSchema>) => {
         try {
             const response = await getClient().getOptionsEMA(input);
             response.results.underlying?.url && delete response.results.underlying?.url
-
             return response.results;
         }
         catch (e) {
             return e instanceof Error ? e.message : "Unknown error occurred";
         }
-
     }
 })
 
 type DefaultApiGetOptionsMacdRequestSchema = z.infer<typeof defaultApiGetOptionsMacdRequestSchema>;
 export const getMACD = tool({
     name: 'get_macd',
-    description: 'Retrieve the Moving Average Convergence/Divergence (MACD) for a specified ticker over a defined time range. MACD is a momentum indicator derived from two moving averages, helping to identify trend strength, direction, and potential trading signals. ***Use Cases:*** Momentum analysis, signal generation (crossover events), spotting overbought/oversold conditions, and confirming trend directions.',
+    description: "Retrieve the Moving Average Convergence/Divergence (MACD) for a specified ticker. [IMPORTANT]: Use 'timestamp' for a single date. For a date range, use 'timestampGte' and/or 'timestampLte'. DO NOT mix 'timestamp' with range parameters (Gte, Gt, Lte, Lt) to avoid 400 errors. MACD is used for momentum and trend direction analysis.",
     parameters: defaultApiGetOptionsMacdRequestSchema,
     execute: async (input: ToolExecuteArgument<DefaultApiGetOptionsMacdRequestSchema>)=>{
         try {
@@ -72,7 +70,7 @@ export const getMACD = tool({
 type DefaultApiGetOptionsRsiRequestSchema = z.infer<typeof defaultApiGetOptionsRsiRequestSchema>;
 export const getRSI = tool({
     name: 'get_rsi',
-    description: 'Retrieve the Relative Strength Index (RSI) for a specified ticker over a defined time range. The RSI measures the speed and magnitude of price changes, oscillating between 0 and 100 to help identify overbought or oversold conditions. ***Use Cases:*** Overbought/oversold detection, divergence analysis, trend confirmation, and refining market entry/exit strategies.',
+    description: "Retrieve the Relative Strength Index (RSI) for a specified ticker. [IMPORTANT]: Use 'timestamp' for a single date. For a date range, use 'timestampGte' and/or 'timestampLte'. DO NOT mix 'timestamp' with range parameters (Gte, Gt, Lte, Lt) to avoid 400 errors. RSI measures price change speed to identify overbought or oversold conditions.",
     parameters: defaultApiGetOptionsRsiRequestSchema,
     execute: async (input: ToolExecuteArgument<DefaultApiGetOptionsRsiRequestSchema>)=>{
         try {
@@ -87,7 +85,6 @@ export const getRSI = tool({
         }
     }
 })
-
 type DefaultApiGetStocksV1ShortInterestRequestSchema = z.infer<typeof defaultApiGetStocksV1ShortInterestRequestSchema>;
 export const queryShortInterest = tool({
     name: 'query_short_interest',
