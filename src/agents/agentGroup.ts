@@ -131,11 +131,11 @@ export class AgentGroup implements IAgentGroup {
                     'get_daily_open_close_agg',
                     'get_snapshot_all',
                     'list_ipos',
-                    // 'list_short_interest',
-                    // 'list_short_volume',
                     'get_ticker_types',
                     'get_snapshot_direction',
                     'list_universal_snapshots'
+                    // 'list_short_interest',
+                    // 'list_short_volume',
                 ],
             }),
             env: {

@@ -19,7 +19,8 @@
     "@keyv/memcache" : "^2.0.2",
     "@stoqey/finnhub" : "^0.3.4",
     "dotenv": "^16.0.0",
-    "json-2-csv":"^5.5.10"
+    "json-2-csv":"^5.5.10",
+    "lodash-es": "4.17.22"
   },
   "devDependencies": {
     "tsx" : "^4.21.0",

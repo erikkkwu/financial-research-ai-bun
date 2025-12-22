@@ -11,6 +11,7 @@ import {
     OrderTypeEnum,
     ShortInterestSortFields, ShortVolumeSortFields,
 } from "./interfaces/massive-zod.js";
+import { orderBy } from 'lodash-es'
 
 import {json2csv} from 'json-2-csv'
 
@@ -24,9 +25,11 @@ export const getSMA = tool({
     parameters: defaultApiGetOptionsSmaRequestSchema,
     execute: async (input: ToolExecuteArgument<DefaultApiGetOptionsSmaRequestSchema>) => {
         try {
-            const response = await getClient().getOptionsSMA(input);
-            response.results.underlying?.url && delete response.results.underlying?.url
-            return response.results;
+            const response = await getClient().getOptionsSMA(({
+                ...input,
+                limit: 5000
+            }));
+            return orderBy(response.results.values, ['timestamp'], ['desc']);
         } catch (e) {
             return e instanceof Error ? e.message : "Unknown error occurred";
         }
@@ -40,9 +43,11 @@ export const getEMA = tool({
     parameters: defaultApiGetOptionsEmaRequestSchema,
     execute: async (input: ToolExecuteArgument<DefaultApiGetOptionsEmaRequestSchema>) => {
         try {
-            const response = await getClient().getOptionsEMA(input);
-            response.results.underlying?.url && delete response.results.underlying?.url
-            return response.results;
+            const response = await getClient().getOptionsEMA(({
+                ...input,
+                limit: 5000
+            }));
+            return orderBy(response.results.values, ['timestamp'], ['desc']);
         }
         catch (e) {
             return e instanceof Error ? e.message : "Unknown error occurred";
@@ -57,9 +62,11 @@ export const getMACD = tool({
     parameters: defaultApiGetOptionsMacdRequestSchema,
     execute: async (input: ToolExecuteArgument<DefaultApiGetOptionsMacdRequestSchema>)=>{
         try {
-            const response = await getClient().getOptionsMACD(input);
-            response.results.underlying?.url && delete response.results.underlying?.url
-            return response.results;
+            const response = await getClient().getOptionsMACD({
+                ...input,
+                limit: 5000
+            });
+            return orderBy(response.results.values, ['timestamp'], ['desc']);
         }
         catch (e) {
             return e instanceof Error ? e.message : "Unknown error occurred";
@@ -74,11 +81,11 @@ export const getRSI = tool({
     parameters: defaultApiGetOptionsRsiRequestSchema,
     execute: async (input: ToolExecuteArgument<DefaultApiGetOptionsRsiRequestSchema>)=>{
         try {
-            const response = await getClient().getOptionsRSI(input);
-            if(response.results.underlying?.url){
-                delete response.results.underlying?.url
-            }
-            return response.results;
+            const response = await getClient().getOptionsRSI({
+                ...input,
+                limit: 5000
+            });
+            return orderBy(response.results.values, ['timestamp'], ['desc']);
         }
         catch (e) {
             return e instanceof Error ? e.message : "Unknown error occurred";
